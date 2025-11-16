@@ -738,16 +738,17 @@ in
       spgoding.datapack-language-server
     ]) ++ (with pkgs.vscode-marketplace; [
       # language support
-      sumneko.lua
-      vgalaktionov.moonscript
-      lijin.yuescript
-      tnze.snbt
-      mrmlnc.vscode-json5
       geequlim.godot-tools
-      yesterday17.zenscript
       jcs090218.ellsp
+      lijin.yuescript
+      mrmlnc.vscode-json5
+      ms-vscode.cpptools
       ronnidc.nunjucks
+      sumneko.lua
+      tnze.snbt
       unifiedjs.vscode-mdx
+      vgalaktionov.moonscript
+      yesterday17.zenscript
       # this one broken somehow, bruh:
       #rust-lang.rust-analyzer
 
