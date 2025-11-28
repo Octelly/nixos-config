@@ -8,6 +8,7 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "unstable";
     };
+    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable"; # do not add follows
     plasma-manager = {
       url = "github:pjones/plasma-manager";
       inputs.nixpkgs.follows = "unstable";

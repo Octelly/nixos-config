@@ -88,7 +88,21 @@
     looking-glass-client # good VM video
   ];
 
-  boot.kernelPackages = lib.mkForce pkgs.unstable-znver3.linuxPackages_zen;
+  #boot.kernelPackages = lib.mkForce pkgs.unstable-znver3.linuxPackages_zen;
+  #boot.kernelPackages = lib.mkForce (pkgs.linuxPackages_cachyos-lto.cachyOverride {
+  # no LTO, Clang breaks vmware
+  boot.kernelPackages = lib.mkForce (pkgs.linuxPackages_cachyos.cachyOverride {
+    mArch = "GENERIC_V3";
+    ticksHz = 1000;
+    hugePages = "madvise";
+  });
+
+  services.ananicy = {
+    enable = true;
+    rulesProvider = pkgs.ananicy-rules-cachyos_git;
+  };
+  # NOTE: should not be mixed with ananicy
+  modules.desktop.gaming.utils.gamemode = lib.mkForce false;
 
   # NOTE: apfs breaks very often and is often temporarily disabled
   #boot.extraModulePackages = with config.boot.kernelPackages; [
