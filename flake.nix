@@ -23,10 +23,10 @@
       url = "github:project-gauntlet/gauntlet";
       inputs.nixpkgs.follows = "unstable";
     };
-    wezterm = {
-      url = "github:wezterm/wezterm?dir=nix";
-      inputs.nixpkgs.follows = "unstable";
-    };
+    #wezterm = {
+    #  url = "github:wezterm/wezterm?dir=nix";
+    #  inputs.nixpkgs.follows = "unstable";
+    #};
     ghostty = {
       url = "github:ghostty-org/ghostty";
       inputs.nixpkgs.follows = "unstable";

@@ -7,7 +7,7 @@ in
 {
   home = {
     packages = with pkgs; [
-      bitwarden
+      bitwarden-desktop
     ];
 
     sessionVariables = variables;

@@ -8,7 +8,7 @@
   home = {
     packages = (with pkgs; [
       (pcmanfm.override { withGtk3 = true; })
-      tor-browser-bundle-bin
+      tor-browser
       wlr-randr
       rofi
       scrot
@@ -17,7 +17,7 @@
       obsidian
       zed-editor
       nicotine-plus # yarr harr
-      blockbench-electron
+      blockbench
       #jrnl
       feh
       ncdu
@@ -285,6 +285,6 @@
     ./modules/apps/vscodium.nix
     ./modules/apps/wezterm.nix
 
-    ./modules/wms/hyprland
+    #./modules/wms/hyprland
   ];
 }

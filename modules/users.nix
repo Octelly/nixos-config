@@ -75,7 +75,7 @@ in
       apro = {
         desc = "Emi Pikner";
         modules = [ ];
-        shell = pkgs.fish;
+        shell = pkgs.zsh;
         fc = {
           # `fonts` takes a list of packages
           fonts = with pkgs; [

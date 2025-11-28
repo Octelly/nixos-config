@@ -35,7 +35,7 @@
       		'';
   };
 
-  home.packages = with pkgs; [ mpc_cli ];
+  home.packages = with pkgs; [ mpc ];
 
   services.mpdris2 = {
     enable = true;

@@ -134,7 +134,7 @@
       fd
       gcc
       git
-      glxinfo # Required for "OpenGL (GLX)" page of KDE's Info Center
+      mesa-demos # Required for "OpenGL (GLX)" page of KDE's Info Center
       libnotify
       lm_sensors
       man-pages
@@ -155,7 +155,7 @@
     ++ lib.optional config.services.desktopManager.plasma6.enable pkgs.kdePackages.plasma-welcome;
 
     # WARN: polkit will error out with shells not listed here
-    shells = with pkgs; [ fish zsh bash nushell elvish ];
+    shells = with pkgs; [ zsh bash nushell elvish ];
     binsh = "${pkgs.bash}/bin/bash";
 
     variables = {
@@ -190,7 +190,7 @@
       viAlias = true;
       vimAlias = true;
     };
-    fish.enable = true;
+    fish.enable = false;
     zsh.enable = true;
 
     # Nix helper CLI

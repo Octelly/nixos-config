@@ -299,7 +299,7 @@ in
         #  ];
         #})
 
-        jellyfin-media-player
+        stable.jellyfin-media-player
         moonlight-qt
         grayjay
 
@@ -390,7 +390,8 @@ in
         qpwgraph
         bleachbit
 
-        inputs.wezterm.packages.${system}.default
+        #inputs.wezterm.packages.${system}.default
+        wezterm
         waypipe # Xorg SSH forwarding but for Wayland
         waycheck
 
