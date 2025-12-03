@@ -727,6 +727,7 @@ in
       sainnhe.sonokai
       pkief.material-icon-theme
 
+
       # language support
       #bungcip.better-toml
       tamasfe.even-better-toml
@@ -751,6 +752,7 @@ in
       unifiedjs.vscode-mdx
       vgalaktionov.moonscript
       yesterday17.zenscript
+      myriad-dreamin.tinymist # typst
       # this one broken somehow, bruh:
       #rust-lang.rust-analyzer
 
