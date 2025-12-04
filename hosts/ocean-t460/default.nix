@@ -10,13 +10,12 @@ lib.nixosSystem {
       networking.hostName = "ocean-t460";
     }
 
-    inputs.home.nixosModules.home-manager
-    #inputs.flatpaks.nixosModules.declarative-flatpak
+    inputs.chaotic.nixosModules.default
     inputs.determinate.nixosModules.default
+    inputs.home.nixosModules.home-manager
+    inputs.lsfg-vk-flake.nixosModules.default
 
     inputs.nixHW.nixosModules.lenovo-thinkpad-t460
-
-    inputs.lsfg-vk-flake.nixosModules.default
 
     ../shared/configuration.nix
     ./configuration.nix

@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{ lib, pkgs, ... }: {
 
   nix.buildMachines = [{
     hostName = "192.168.1.238";
@@ -51,6 +51,16 @@
   networking.firewall.allowedTCPPorts = [ 25565 ];
 
   virtualisation.waydroid.enable = true;
+
+  # can use Clang here, no special kernel modules (vmware) used
+  boot.kernelPackages = lib.mkForce pkgs.linuxPackages_cachyos-lto;
+
+  services.ananicy = {
+    enable = true;
+    rulesProvider = pkgs.ananicy-rules-cachyos_git;
+  };
+  # NOTE: should not be mixed with ananicy
+  modules.desktop.gaming.utils.gamemode = lib.mkForce false;
 
   #nix.buildMachines = [{
   #  hostName = "192.168.1.137";
