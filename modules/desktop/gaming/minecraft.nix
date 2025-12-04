@@ -19,7 +19,7 @@ in {
           temurin-bin-21 # formerly adoptopenjdk (this is adoptium)
           temurin-bin-25
         ];
-        gamemodeSupport = stdenv.hostPlatform.isLinux && modules.desktop.gaming.utils.gamemode;
+        gamemodeSupport = stdenv.hostPlatform.isLinux && config.modules.desktop.gaming.utils.gamemode;
       })
     ];
   };
