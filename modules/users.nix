@@ -72,38 +72,38 @@ in
   options.modules.users = mkOption {
     type = types.attrs;
     default = {
-      apro = {
-        desc = "Emi Pikner";
-        modules = [ ];
-        shell = pkgs.zsh;
-        fc = {
-          # `fonts` takes a list of packages
-          fonts = with pkgs; [
-            maple-mono.NF
-            cozette
-            atkinson-hyperlegible-next
-            roboto
-            twemoji-color-font
-            noto-fonts
-            noto-fonts-cjk-sans
-            noto-fonts-cjk-serif
-            noto-fonts-emoji-blob-bin
-            material-design-icons
-          ];
-          # list of pkgs.nerd-fonts attributes
-          nerd-fonts = [ "iosevka" "jetbrains-mono" ];
-          defaultFonts = {
-            monospace = [ "Maple Mono NF" "Iosevka Nerd Font" "Cozette" ];
-            sansSerif =
-              [ "Atkinson Hyperlegible Next" ]
-              ++ map (v: "Noto Sans CJK ${v}") [ "SC" "TC" "HK" "JP" "KR" ];
-            serif =
-              [ "Noto Serif" ]
-              ++ map (v: "Noto Serif CJK ${v}") [ "SC" "TC" "HK" "JP" "KR" ];
-            emoji = [ "Blobmoji" "Twitter Color Emoji" ];
-          };
-        };
-      };
+      #apro = {
+      #  desc = "Emi Pikner";
+      #  modules = [ ];
+      #  shell = pkgs.zsh;
+      #  fc = {
+      #    # `fonts` takes a list of packages
+      #    fonts = with pkgs; [
+      #      maple-mono.NF
+      #      cozette
+      #      atkinson-hyperlegible-next
+      #      roboto
+      #      twemoji-color-font
+      #      noto-fonts
+      #      noto-fonts-cjk-sans
+      #      noto-fonts-cjk-serif
+      #      noto-fonts-emoji-blob-bin
+      #      material-design-icons
+      #    ];
+      #    # list of pkgs.nerd-fonts attributes
+      #    nerd-fonts = [ "iosevka" "jetbrains-mono" ];
+      #    defaultFonts = {
+      #      monospace = [ "Maple Mono NF" "Iosevka Nerd Font" "Cozette" ];
+      #      sansSerif =
+      #        [ "Atkinson Hyperlegible Next" ]
+      #        ++ map (v: "Noto Sans CJK ${v}") [ "SC" "TC" "HK" "JP" "KR" ];
+      #      serif =
+      #        [ "Noto Serif" ]
+      #        ++ map (v: "Noto Serif CJK ${v}") [ "SC" "TC" "HK" "JP" "KR" ];
+      #      emoji = [ "Blobmoji" "Twitter Color Emoji" ];
+      #    };
+      #  };
+      #};
       octelly = {
         desc = "Eliška Štefková";
         modules = [ ];

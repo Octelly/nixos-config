@@ -230,7 +230,7 @@ in
 
         heroic
         r2modman
-        gale
+        #gale
 
         #cinnamon.nemo-with-extensions
 

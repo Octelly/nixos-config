@@ -27,10 +27,10 @@
     #  url = "github:wezterm/wezterm?dir=nix";
     #  inputs.nixpkgs.follows = "unstable";
     #};
-    ghostty = {
-      url = "github:ghostty-org/ghostty";
-      inputs.nixpkgs.follows = "unstable";
-    };
+    #ghostty = {
+    #  url = "github:ghostty-org/ghostty";
+    #  inputs.nixpkgs.follows = "unstable";
+    #};
     nixvim = {
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "unstable";
@@ -60,19 +60,19 @@
     };
 
     ## Hyprland stuff
-    hyprland.url = "github:hyprwm/Hyprland";
-    hyprland-plugins = {
-      url = "github:hyprwm/hyprland-plugins";
-      inputs.hyprland.follows = "hyprland";
-    };
-    hyprsplit = {
-      url = "github:shezdy/hyprsplit";
-      inputs.hyprland.follows = "hyprland";
-    };
-    hypr-dynamic-cursors = {
-      url = "github:VirtCode/hypr-dynamic-cursors";
-      inputs.hyprland.follows = "hyprland";
-    };
+    #hyprland.url = "github:hyprwm/Hyprland";
+    #hyprland-plugins = {
+    #  url = "github:hyprwm/hyprland-plugins";
+    #  inputs.hyprland.follows = "hyprland";
+    #};
+    #hyprsplit = {
+    #  url = "github:shezdy/hyprsplit";
+    #  inputs.hyprland.follows = "hyprland";
+    #};
+    #hypr-dynamic-cursors = {
+    #  url = "github:VirtCode/hypr-dynamic-cursors";
+    #  inputs.hyprland.follows = "hyprland";
+    #};
 
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake";
