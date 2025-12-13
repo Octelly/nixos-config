@@ -734,7 +734,7 @@ in
       # language support
       #bungcip.better-toml
       tamasfe.even-better-toml
-      ms-pyright.pyright
+      #ms-pyright.pyright # pylance is installed?
       ms-python.python
       ms-python.isort
       jnoortheen.nix-ide
