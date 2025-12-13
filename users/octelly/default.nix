@@ -270,6 +270,10 @@ in
         gittyup
         #jetbrains.idea-community
 
+        (ouch.override {
+          enableUnfree = true;
+        })
+
 
         ## sway
         #swaysome
