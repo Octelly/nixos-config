@@ -1,0 +1,11 @@
+{ inputs, ... }: final: prev: {
+  dbus = prev.dbus.override {
+    systemdMinimal = final.systemd;
+  };
+
+  # NOTE: fix infinite recursion
+  systemd = prev.systemd.override {
+    libfido2 = null;
+    withFido2 = false;
+  };
+}

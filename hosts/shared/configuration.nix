@@ -34,6 +34,8 @@
       grub = {
         enable = true;
 
+        timeoutStyle = "hidden";
+
         #theming
         splashImage = ./boot_logo.png;
         splashMode = "normal";
@@ -206,7 +208,8 @@
   };
 
   # gtklock access to password verification (PAM)
-  security.pam.services.gtklock.text = lib.readFile "${pkgs.gtklock}/etc/pam.d/gtklock";
+  # NOTE: disabled as gtklock was not being used
+  # security.pam.services.gtklock.text = lib.readFile "${pkgs.gtklock}/etc/pam.d/gtklock";
 
   security.polkit = {
     enable = true;
@@ -222,8 +225,15 @@
     };
   };
 
+  systemd.services.NetworkManager-wait-online.enable = false;
+
   services = {
-    dbus.enable = true;
+    dbus = {
+      enable = true;
+      dbusPackage = pkgs.dbus.override {
+        systemdMinimal = config.systemd.package;
+      };
+    };
 
     # firmware updates (you probably call it BIOS)
     # Required for "Firmware Security" page of KDE's Info Center
@@ -303,4 +313,15 @@
       xdg-desktop-portal-gtk
     ];
   };
+
+  # inspired by perlless profile
+  # https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/profiles/perlless.nix
+  boot.initrd.systemd.enable = lib.mkDefault true;
+  boot.initrd.systemd.fido2.enable = lib.mkDefault false;
+  documentation.info.enable = lib.mkDefault false;
+  documentation.nixos.enable = lib.mkDefault false;
+  environment.defaultPackages = lib.mkDefault [ ];
+  services.userborn.enable = lib.mkDefault true;
+  #system.etc.overlay.enable = lib.mkDefault true; # WARN: EXPERIMENTAL
+  system.tools.nixos-generate-config.enable = lib.mkDefault false;
 }

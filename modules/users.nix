@@ -28,6 +28,7 @@ with lib; let
         homeMode = "755";
         initialPassword = "gay";
         shell = v.shell or config.users.defaultUserShell;
+        uid = v.uid or null;
       })
       cfg;
 
@@ -126,6 +127,7 @@ in
           };
         };
         shell = pkgs.nushell;
+        uid = 1001;
       };
     };
   };

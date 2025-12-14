@@ -807,6 +807,7 @@ in
         }
       ];
 
+      "breadcrumbs.enabled" = false;
       "editor.minimap.enabled" = false;
       "workbench.startupEditor" = "none";
 
@@ -832,7 +833,7 @@ in
       # Vim
       "vim.useSystemClipboard" = true;
       "vim.enableNeovim" = true;
-      "vim.neovimPath" = "${pkgs.neovim}/bin/nvim";
+      "vim.neovimPath" = (lib.getExe config.programs.neovim.package);
       "vim.hlsearch" = true;
     };
   };
