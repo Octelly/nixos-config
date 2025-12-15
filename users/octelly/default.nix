@@ -755,6 +755,7 @@ in
       unifiedjs.vscode-mdx
       vgalaktionov.moonscript
       yesterday17.zenscript
+      ms-vscode.live-server
       # this one broken somehow, bruh:
       #rust-lang.rust-analyzer
 
