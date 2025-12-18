@@ -737,6 +737,7 @@ in
       #ms-pyright.pyright # pylance is installed?
       ms-python.python
       ms-python.isort
+      svelte.svelte-vscode
       jnoortheen.nix-ide
       rust-lang.rust-analyzer
       #ms-vscode.makefile-tools
