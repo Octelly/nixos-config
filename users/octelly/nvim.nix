@@ -7,6 +7,17 @@
     extraPlugins = with pkgs.vimPlugins; [
       sonokai # theme
       moonscript-vim # language support
+      (pkgs.vimUtils.buildVimPlugin {
+        pname = "jrnl.vim";
+        version = "2024-07-23";
+
+        src = pkgs.fetchFromGitHub {
+          owner = "wren";
+          repo = "jrnl.vim";
+          rev = "4cde7e66d19a7b0a0bb00e0ffc02f3ddb24519ac";
+          hash = "sha256-XL+O/2j7rDNT4mylD8/vX2r/9RVoMRijmIPZaoiCqow=";
+        };
+      })
     ];
 
     globals = {
@@ -60,16 +71,37 @@
     };
 
     extraConfigLua = ''
-      -- font to be used in GUIs such as Neovide
-      vim.o.guifont = "Maple Mono NF:h12"
+                                          -- font to be used in GUIs such as Neovide
+                                          vim.o.guifont = "Maple Mono NF:h12"
 
-      -- check if Neovide options are available
-      if vim.g.neovide then
-        vim.g.neovide_hide_mouse_when_typing = true
-        vim.g.neovide_remember_window_size = true
-        vim.g.neovide_cursor_animate_in_insert_mode = false
-        vim.g.neovide_cursor_vfx_mode = "railgun"
-      end
+                                          -- check if Neovide options are available
+                                          if vim.g.neovide then
+                                            vim.g.neovide_hide_mouse_when_typing = true
+                                            vim.g.neovide_remember_window_size = true
+                                            vim.g.neovide_cursor_animate_in_insert_mode = false
+                                            vim.g.neovide_cursor_vfx_mode = "railgun"
+                                          end
+
+                                    	  vim.api.nvim_create_autocmd('FileType', {
+                                    		    pattern = 'jrnl',
+                                    		    callback = function ()
+                        						vim.schedule(function ()
+                              				require("zen-mode").open({
+                              				  window = {
+                              				    width = 78,
+                  								options = {
+                  								  signcolumn = "no",
+                  								  number = false,
+                  								  relativenumber = false,
+                  								  cursorcolumn = false,
+                  								  foldcolumn = "0"
+                  								}
+                              				  }
+                              				})
+      										vim.o.foldenable = false
+                        					end)
+                                    		    end,
+                                    		})
     '';
 
     # https://editorconfig.org/
@@ -197,6 +229,9 @@
       smart-splits = {
         enable = true;
       };
+
+      # used for JRNL.sh
+      zen-mode.enable = true;
 
       # pretty diagnostics, references, quickfixes, etc.
       trouble.enable = true;
