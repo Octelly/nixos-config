@@ -18,6 +18,26 @@ in
   programs.plasma = {
     enable = true;
 
+    shortcuts = {
+      ksmserver."Lock Session" = [ "Meta+L" "Screensaver" ];
+      kwin.KrohnkiteDecrease = "Meta+-";
+      kwin.KrohnkiteIncrease = "Meta+=";
+      kwin.KrohnkiteToggleFloat = "Meta+Ctrl+Space";
+      kwin."Walk Through Windows" = "Alt+Tab";
+      kwin."Walk Through Windows (Reverse)" = "Alt+Shift+Tab";
+      kwin."Window Close" = "Meta+Q";
+      kwin."Window Fullscreen" = "Meta+D";
+      kwin."Window Maximize" = "Meta+W";
+      kwin."Window Minimize" = "Meta+E";
+      kwin."Window Move Center" = "Meta+Home";
+      "services/org.kde.dolphin.desktop"._launch = "Meta+F";
+      "services/org.kde.krunner.desktop"._launch = "Meta+R";
+      "services/org.kde.plasma.emojier.desktop"._launch = "Meta+.";
+      #"services/org.kde.spectacle.desktop".RectangularRegionScreenShot = "Ctrl+Shift+Print";
+    };
+
+
+
     fonts = rec {
       general = {
         family = "Noto Sans";
@@ -167,6 +187,40 @@ in
     #};
 
     configFile = {
+      dolphinrc = {
+        General = {
+          RememberOpenedTabs = false;
+          ShowFullPath = true;
+        };
+        IconsMode = {
+          IconSize = 160;
+          PreviewSize = 224;
+        };
+        PreviewSettings.Plugins = (builtins.concatStringsSep ","
+          [
+            "appimagethumbnail"
+            "audiothumbnail"
+            "blenderthumbnail"
+            "comicbookthumbnail"
+            "cursorthumbnail"
+            "djvuthumbnail"
+            "ebookthumbnail"
+            "exrthumbnail"
+            "fontthumbnail"
+            "imagethumbnail"
+            "jpegthumbnail"
+            "kraorathumbnail"
+            "windowsexethumbnail"
+            "windowsimagethumbnail"
+            "mobithumbnail"
+            "opendocumentthumbnail"
+            "gsthumbnail"
+            "rawthumbnail"
+            "svgthumbnail"
+            "ffmpegthumbs"
+          ]);
+      };
+
       kglobalshortcutsrc = {
         "[services][org.kde.spectacle.desktop]" = {
           OpenWithoutScreenshot = "none";
@@ -192,11 +246,58 @@ in
         };
       };
       kdeglobals = {
-        KDE.widgetStyle = "Klassy";
+        General = {
+          TerminalApplication = "wezterm start --cwd .";
+          TerminalService = "org.wezfurlong.wezterm.desktop";
+          fixed = "Maple Mono NF,12,-1,5,400,0,0,0,0,0,0,0,0,0,0,1";
+          font = "Noto Sans,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1";
+          menuFont = "Noto Sans,8,-1,5,400,0,0,0,0,0,0,0,0,0,0,1";
+          smallestReadableFont = "Noto Sans,8,-1,5,400,0,0,0,0,0,0,0,0,0,0,1";
+        };
+        Icons.Theme = "klassy-dark";
+        KDE = {
+          widgetStyle = "Klassy";
+          ShowDeleteCommand = false;
+          SingleClick = false;
+        };
       };
-      kwinrc."org.kde.kdecoration2" = {
-        library = "org.kde.klassy";
-        theme = "Klassy";
+      kwinrc = {
+        "org.kde.kdecoration2" = {
+          library = "org.kde.klassy";
+          theme = "Klassy";
+        };
+
+        Effect-blur = {
+          BlurStrength = 11;
+          NoiseStrength = 14;
+        };
+        Effect-blurplus = {
+          BlurStrength = 11;
+          FakeBlur = true;
+          NoiseStrength = 14;
+          WindowClasses = "org.wezfurlong.wezterm";
+        };
+
+        Plugins = {
+          blurEnabled = true;
+          forceblurEnabled = true;
+          krohnkiteEnabled = true;
+        };
+
+        Script-khronkite = {
+          enableColumnsLayout = false;
+          enableMonocleLayout = false;
+          enableSpiralLayout = false;
+          enableSpreadLayout = false;
+          enableStairLayout = false;
+          enableThreeColumnLayout = false;
+          floatingClass = "mpv,org.kde.gwenview,re.sonny.Junction,Bitwarden";
+          screenGapBottom = 5;
+          screenGapLeft = 5;
+          screenGapRight = 5;
+          screenGapTop = 5;
+          tileLayoutGap = 5;
+        };
       };
       plasma-localerc.Formats = with config.home.language; {
         LC_ALL = base;
@@ -217,6 +318,7 @@ in
         (builtins.elemAt
           (pkgs.lib.strings.splitString "." config.home.language.base))
           0;
+      plasmanotifyrc.Notifications.PopupPosition = "TopCenter";
     };
   };
 }

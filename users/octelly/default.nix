@@ -1368,6 +1368,7 @@ in
     #./programs/mopidy
     #./programs/emacs
     ./programs/btop
+    ./programs/konsole
     ./addons/tinymist
   ];
 }
