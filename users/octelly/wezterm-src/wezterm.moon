@@ -1,5 +1,7 @@
 wezterm = require 'wezterm'
 
+smart_splits = wezterm.plugin.require 'https://github.com/mrjones2014/smart-splits.nvim'
+
 wezterm.on 'update-status', (window, pane) ->
     meta = pane\get_metadata() or {}
     process = pane\get_foreground_process_info()
@@ -48,5 +50,13 @@ with config
 
 for k, v in pairs require 'config'
 	config[k] = v
+
+smart_splits.apply_to_config config, {
+	direction_keys: {"LeftArrow", "DownArrow", "UpArrow", "RightArrow"}
+	modifiers: {
+		move: "SHIFT"
+		resize: "ALT"
+	}
+}
 
 return config

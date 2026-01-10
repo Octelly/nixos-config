@@ -4,7 +4,7 @@ wezterm = require 'wezterm'
 	check_for_updates: false
 	front_end: "WebGpu"
 
-	--NOTE: nightly-only as of writing
+	-- NOTE: nightly-only as of writing
 	default_ssh_auth_sock: os.getenv 'SSH_AUTH_SOCK'
 
 	keys: {

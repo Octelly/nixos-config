@@ -1,9 +1,5 @@
 { pkgs, ... }:
 {
-  #programs.neovide = {
-  #  enable = true;
-  #  settings = { };
-  #};
   programs.nixvim = {
     enable = true;
     defaultEditor = true;
@@ -163,15 +159,25 @@
           };
 
           # LUA
-          lua_ls.enable = true;
+          #lua_ls.enable = true;
+          emmylua_ls.enable = true;
 
           # Python
-          pyright.enable = true;
+          #pyright.enable = true;
+          ruff.enable = true;
+          ty.enable = true;
+
+          # Svelte
+          svelte.enable = true;
 
           # JS/TS
-          ts_ls = {
-            enable = true;
-          };
+          ts_ls.enable = true;
+
+          # Docker
+          docker_language_server.enable = true;
+
+          # Typst
+          tinymist.enable = true;
         };
       };
 
@@ -183,6 +189,9 @@
         enable = true;
         cmp.enable = cmp.enable;
       };
+
+      # Typst live preview
+      typst-preview.enable = true;
 
       # better splits with support for wez, kitty, tmux
       smart-splits = {
@@ -232,6 +241,15 @@
           renderer.icons.show.git = false;
         };
       };
+
+      scrollview = {
+        enable = true;
+        settings.signs_on_startup = [ "all" ];
+      };
+
+      #mini-basics = {
+      #  enable = true;
+      #};
 
       # icons provider for nvim-tree, trouble and other plugins
       web-devicons.enable = true;
