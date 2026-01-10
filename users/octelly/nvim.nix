@@ -8,6 +8,20 @@
       sonokai # theme
       moonscript-vim # language support
       (pkgs.vimUtils.buildVimPlugin {
+        # syncs terminal background with theme background (OSC11)
+        # NOTE: does not change opacity on Wezterm
+        pname = "bg.nvim";
+        version = "2024-12-16";
+
+        src = pkgs.fetchFromGitHub {
+          owner = "typicode";
+          repo = "bg.nvim";
+          rev = "df916e4df2493ee302eea62185ed014ba7ca40d9";
+          hash = "sha256-H+ZFX0hE9te6qo+fzUuWngHOEf0zGyHkEIQIYvyTzTI=";
+        };
+      })
+      (pkgs.vimUtils.buildVimPlugin {
+        # syntax highlight for jrnl.sh
         pname = "jrnl.vim";
         version = "2024-07-23";
 
@@ -272,6 +286,14 @@
         smartRename.enable = true;
       };
 
+      colorizer = {
+        enable = true;
+        settings.user_default_options = {
+          mode = "virtualtext";
+          virtualtext_inline = true;
+        };
+      };
+
       # see project directory (cd into project with :cd)
       nvim-tree = {
         enable = true;
@@ -282,6 +304,18 @@
           # colours are enough imo
           renderer.icons.show.git = false;
         };
+      };
+
+      bufferline = {
+        enable = true;
+        settings.options.offsets = [
+          {
+            filetype = "NvimTree";
+            text = "meow~ :3";
+            highlight = "Directory";
+            separator = true;
+          }
+        ];
       };
 
       scrollview = {

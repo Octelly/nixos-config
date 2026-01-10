@@ -32,6 +32,21 @@ wezterm.on 'update-status', (window, pane) ->
         overrides.font = nil
         overrides.enable_scroll_bar = nil
 
+	if string.find(string.lower(process.name), "nvim") or string.find(string.lower(process.executable), "nvim")
+		overrides.enable_scroll_bar = false
+		overrides.window_background_opacity = 1.0
+		overrides.window_padding = {
+			left: 0
+			right: 0
+			top: 0
+			bottom: 0
+		}
+	else
+		overrides.enable_scroll_bar = nil
+		overrides.window_background_opacity = nil
+		overrides.window_padding = nil
+
+
     window\set_config_overrides(overrides)
 
 colour_schemes_dir = '/colour_schemes'
