@@ -1,9 +1,9 @@
-{ pkgs, config, ... }:
+{ pkgs, ... }:
 {
-  programs.neovide = {
-    enable = true;
-    settings = { };
-  };
+  #programs.neovide = {
+  #  enable = true;
+  #  settings = { };
+  #};
   programs.nixvim = {
     enable = true;
     defaultEditor = true;
@@ -26,7 +26,6 @@
       #          if you encounter issues, disable this
       cmdheight = 0;
     };
-
 
     colorscheme = "sonokai";
 
@@ -67,7 +66,7 @@
     extraConfigLua = ''
       -- font to be used in GUIs such as Neovide
       vim.o.guifont = "Maple Mono NF:h12"
-      
+
       -- check if Neovide options are available
       if vim.g.neovide then
         vim.g.neovide_hide_mouse_when_typing = true

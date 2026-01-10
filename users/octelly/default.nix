@@ -1,4 +1,12 @@
-{ config, nixConfig, inputs, lib, pkgs, system, ... }:
+{
+  config,
+  nixConfig,
+  inputs,
+  lib,
+  pkgs,
+  system,
+  ...
+}:
 
 let
   chromiumFlags = [
@@ -111,7 +119,8 @@ let
   #    mainProgram = "klassy-settings";
   #  };
   #});
-  schildichat-desktop-appimage = with pkgs;
+  schildichat-desktop-appimage =
+    with pkgs;
     let
       pname = "schildichat-desktop";
       version = "1.11.86-sc.0.test.0";
@@ -139,269 +148,271 @@ let
         cp -r ${appimageContents}/usr/share/icons $out/share
       '';
     };
-  videomass = with pkgs.python3Packages; buildPythonPackage rec {
-    pname = "videomass";
-    version = "5.0.21";
-    pyproject = true;
+  videomass =
+    with pkgs.python3Packages;
+    buildPythonPackage rec {
+      pname = "videomass";
+      version = "5.0.21";
+      pyproject = true;
 
-    src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-+l086zSsqO5AtEsLLp6CFOF4iAuor/xAFty0gCwniKg=";
+      src = fetchPypi {
+        inherit pname version;
+        hash = "sha256-+l086zSsqO5AtEsLLp6CFOF4iAuor/xAFty0gCwniKg=";
+      };
+
+      build-system = [
+        babel
+        hatchling
+        setuptools # distutils
+      ];
+
+      dependencies = [
+        pkgs.ffmpeg-full
+        pypubsub
+        wxpython
+        yt-dlp
+      ];
     };
-
-    build-system = [
-      babel
-      hatchling
-      setuptools # distutils
-    ];
-
-    dependencies = [
-      pkgs.ffmpeg-full
-      pypubsub
-      wxpython
-      yt-dlp
-    ];
-  };
 in
 {
   home = {
-    packages = with pkgs;
-      [
-        #warble
+    packages = with pkgs; [
+      #warble
 
-        #pavucontrol
-        pulsemixer
-        maple-mono.NF
-        #ranger
+      #pavucontrol
+      pulsemixer
+      maple-mono.NF
+      #ranger
 
-        ffmpeg-full
-        #videomass
+      ffmpeg-full
+      #videomass
 
-        qalculate-qt
+      qalculate-qt
 
-        #(discord.override {
-        #  withOpenASAR = true;
-        #  withVencord = true;
-        #})
-        vesktop
-        telegram-desktop
+      #(discord.override {
+      #  withOpenASAR = true;
+      #  withVencord = true;
+      #})
+      vesktop
+      telegram-desktop
 
-        # Matrix clients
-        #beeper
-        # - doesn't count
-        # -- desktop version heavier than any other non-game SW I can think of
+      # Matrix clients
+      #beeper
+      # - doesn't count
+      # -- desktop version heavier than any other non-game SW I can think of
 
-        # "SchildiChat stable"
-        # + based on Element and supports most features
-        # - PWA or Electron
-        # - doesn't do authenticated media
+      # "SchildiChat stable"
+      # + based on Element and supports most features
+      # - PWA or Electron
+      # - doesn't do authenticated media
 
-        #fluffychat
-        # + relatively lightweight (Flutter)
-        # - doesn't distinguish sub-spaces well
-        # - Flutter CSD bug
-        # - weirdly picky with some media (e.g. doesn't load Discord bridge media)
+      #fluffychat
+      # + relatively lightweight (Flutter)
+      # - doesn't distinguish sub-spaces well
+      # - Flutter CSD bug
+      # - weirdly picky with some media (e.g. doesn't load Discord bridge media)
 
-        #schildichat-desktop-appimage
-        # + based on current Element and works
-        # - forces XWayland (never seen Electron do this)
-        # -- shares some poor UI/UX with Element for now (vanilla Element bad)
+      #schildichat-desktop-appimage
+      # + based on current Element and works
+      # - forces XWayland (never seen Electron do this)
+      # -- shares some poor UI/UX with Element for now (vanilla Element bad)
 
-        #cinny-desktop
-        # + relatively lightweight (Tauri)
-        # + good defaults
-        # -- doesn't do sub-spaces at all
+      #cinny-desktop
+      # + relatively lightweight (Tauri)
+      # + good defaults
+      # -- doesn't do sub-spaces at all
 
-        #neochat
-        # + native QT
-        # + uses Plasma's UnifiedPush (notifications without background process)
-        # -- extremely poor E2EE (I don't think I've seen a single encrypted message load)
-        # -- doesn't do sub-spaces (seems to at least be aware of them?)
+      #neochat
+      # + native QT
+      # + uses Plasma's UnifiedPush (notifications without background process)
+      # -- extremely poor E2EE (I don't think I've seen a single encrypted message load)
+      # -- doesn't do sub-spaces (seems to at least be aware of them?)
 
-        # conclusion: I hate Matrix clients
+      # conclusion: I hate Matrix clients
 
-        nheko
-        #nur.repos.deeunderscore.nheko-unstable
-        #nur.repos.deeunderscore.nheko-krunner
+      nheko
+      #nur.repos.deeunderscore.nheko-unstable
+      #nur.repos.deeunderscore.nheko-krunner
 
-        localsend
+      localsend
 
-        appimage-run
+      appimage-run
 
-        heroic
-        r2modman
-        #gale
+      heroic
+      r2modman
+      #gale
 
-        #cinnamon.nemo-with-extensions
+      #cinnamon.nemo-with-extensions
 
-        #libsForQt5.dolphin
-        #libsForQt5.dolphin-plugins
-        #libsForQt5.kio
-        #libsForQt5.kio-admin
-        #libsForQt5.kio-extras
-        #libsForQt5.kimageformats
-        #libsForQt5.qtstyleplugins
-        #qgnomeplatform
-        #qgnomeplatform-qt6
+      #libsForQt5.dolphin
+      #libsForQt5.dolphin-plugins
+      #libsForQt5.kio
+      #libsForQt5.kio-admin
+      #libsForQt5.kio-extras
+      #libsForQt5.kimageformats
+      #libsForQt5.qtstyleplugins
+      #qgnomeplatform
+      #qgnomeplatform-qt6
 
-        #bitwarden
-        #(vivaldi.override {
-        #  proprietaryCodecs = true;
-        #  vivaldi-ffmpeg-codecs = vivaldi-ffmpeg-codecs;
-        #  enableWidevine = true;
-        #  widevine-cdm = widevine-cdm;
-        #  commandLineArgs = chromiumFlags;
-        #})
-        #parsec-bin
+      #bitwarden
+      #(vivaldi.override {
+      #  proprietaryCodecs = true;
+      #  vivaldi-ffmpeg-codecs = vivaldi-ffmpeg-codecs;
+      #  enableWidevine = true;
+      #  widevine-cdm = widevine-cdm;
+      #  commandLineArgs = chromiumFlags;
+      #})
+      #parsec-bin
 
-        #luakit
+      #luakit
 
-        #qownnotes
+      #qownnotes
 
-        #rnix-lsp
-        #nixpkgs-fmt
-        #manix
+      #rnix-lsp
+      #nixpkgs-fmt
+      #manix
 
-        #vmware-workstation
-        #bottles
+      #vmware-workstation
+      #bottles
 
-        #gpt4all
+      #gpt4all
 
-        gittyup
-        #jetbrains.idea-community
+      gittyup
+      #jetbrains.idea-community
 
-        (ouch.override {
-          enableUnfree = true;
-        })
+      (ouch.override {
+        enableUnfree = true;
+      })
 
+      ## sway
+      #swaysome
+      #swww
+      #sov
+      #clipman
+      #wl-clipboard
+      #playerctl
+      #brightnessctl
+      #pamixer
+      #waybar
+      #swaynotificationcenter
 
-        ## sway
-        #swaysome
-        #swww
-        #sov
-        #clipman
-        #wl-clipboard
-        #playerctl
-        #brightnessctl
-        #pamixer
-        #waybar
-        #swaynotificationcenter
+      #onagre
+      #wofi
 
-        #onagre
-        #wofi
+      unstable-small.jamesdsp
 
-        unstable-small.jamesdsp
+      #gtklock
+      #gtklock-userinfo-module
 
-        #gtklock
-        #gtklock-userinfo-module
+      #nvtopPackages.intel
 
-        #nvtopPackages.intel
+      #(xfce.thunar.override {
+      #  thunarPlugins = with pkgs.xfce; [
+      #    thunar-volman
+      #    thunar-archive-plugin
+      #  ];
+      #})
 
-        #(xfce.thunar.override {
-        #  thunarPlugins = with pkgs.xfce; [
-        #    thunar-volman
-        #    thunar-archive-plugin
-        #  ];
-        #})
+      stable.jellyfin-media-player
+      moonlight-qt
+      grayjay
 
-        stable.jellyfin-media-player
-        moonlight-qt
-        grayjay
+      tail-tray
 
-        tail-tray
+      ddcutil
 
-        ddcutil
+      #networkmanagerapplet
+      #networkmanager-l2tp
 
-        #networkmanagerapplet
-        #networkmanager-l2tp
+      #libgnome-keyring
+      #picom
+      #pantheon.pantheon-agent-polkit
+      #numlockx
 
-        #libgnome-keyring
-        #picom
-        #pantheon.pantheon-agent-polkit
-        #numlockx
+      #httpdirfs
+      #fooyin
 
-        #httpdirfs
-        #fooyin
+      #udiskie
+      #xfce.xfce4-power-manager
+      #remmina
 
-        #udiskie
-        #xfce.xfce4-power-manager
-        #remmina
+      #osu-lazer-bin
+      #srb2kart
+      #gamescope
+      #mangohud
+      #tmuf
+      tetrio-desktop
+      #tetrio-plus
+      xonotic-glx
+      #emulationstation-de
+      #inputs.aagl.packages.${pkgs.system}.sleepy-launcher
 
-        #osu-lazer-bin
-        #srb2kart
-        #gamescope
-        #mangohud
-        #tmuf
-        tetrio-desktop
-        xonotic-glx
-        #emulationstation-de
-        #inputs.aagl.packages.${pkgs.system}.sleepy-launcher
+      # plasma theme thing
+      breeze-icons-chameleon
+      inputs.darkly.packages."${system}".darkly-qt6
+      inputs.kwin-effects-forceblur.packages.${pkgs.system}.default
+      kde-rounded-corners
+      klassy
+      plasma-panel-colorizer
+      plasma-wallpaper-effects
+      python313Packages.kde-material-you-colors
 
-        # plasma theme thing
-        breeze-icons-chameleon
-        inputs.darkly.packages."${system}".darkly-qt6
-        inputs.kwin-effects-forceblur.packages.${pkgs.system}.default
-        kde-rounded-corners
-        klassy
-        plasma-panel-colorizer
-        plasma-wallpaper-effects
-        python313Packages.kde-material-you-colors
+      # GTK theme
+      adw-gtk3
 
-        # GTK theme
-        adw-gtk3
+      kdePackages.filelight
+      kdePackages.isoimagewriter
+      kdePackages.kclock
+      kdePackages.kjournald
+      kdePackages.ktorrent
+      kdePackages.partitionmanager
+      qdiskinfo
 
-        kdePackages.filelight
-        kdePackages.isoimagewriter
-        kdePackages.kclock
-        kdePackages.kjournald
-        kdePackages.ktorrent
-        kdePackages.partitionmanager
-        qdiskinfo
+      # spelling stuff
+      # is also used by Plasma
+      aspell
+      aspellDicts.cs
+      aspellDicts.en
+      aspellDicts.en-computers
+      aspellDicts.en-science
 
-        # spelling stuff
-        # is also used by Plasma
-        aspell
-        aspellDicts.cs
-        aspellDicts.en
-        aspellDicts.en-computers
-        aspellDicts.en-science
+      #krdc
 
-        #krdc
+      go-hass-agent
 
-        go-hass-agent
+      rustup
 
-        rustup
+      inputs.zen-browser.packages."${system}".default
 
-        inputs.zen-browser.packages."${system}".default
+      # flameshot and dependencies
+      #flameshot
+      #grim
 
-        # flameshot and dependencies
-        #flameshot
-        #grim
+      # archive manager
+      #mate.engrampa
 
-        # archive manager
-        #mate.engrampa
+      gimp-with-plugins
+      inkscape-with-extensions
+      #aseprite
 
-        gimp-with-plugins
-        inkscape-with-extensions
-        #aseprite
+      thunderbird
+      #planify
+      #newsflash
+      #fluent-reader # replacing Newsflash
+      #rssguard # replacing Fluent Reader
+      eyedropper
+      junction
+      qpwgraph
+      bleachbit
+      drawy
 
-        thunderbird
-        #planify
-        #newsflash
-        #fluent-reader # replacing Newsflash
-        #rssguard # replacing Fluent Reader
-        eyedropper
-        junction
-        qpwgraph
-        bleachbit
+      #inputs.wezterm.packages.${system}.default
+      wezterm
+      waypipe # Xorg SSH forwarding but for Wayland
+      waycheck
 
-        #inputs.wezterm.packages.${system}.default
-        wezterm
-        waypipe # Xorg SSH forwarding but for Wayland
-        waycheck
-
-        inputRedirectionClient-qt
-      ];
+      inputRedirectionClient-qt
+    ];
     pointerCursor = {
       package = posysCursors;
       name = "Posy_Cursor_Black";
@@ -553,36 +564,38 @@ in
         id = 0;
         isDefault = true;
 
-        extensions.packages = (with pkgs.nur.repos.rycee.firefox-addons; [
-          # essentials
-          scroll_anywhere
-          bitwarden
-          kagi-search
-          ublock-origin
+        extensions.packages =
+          (with pkgs.nur.repos.rycee.firefox-addons; [
+            # essentials
+            scroll_anywhere
+            bitwarden
+            kagi-search
+            ublock-origin
 
-          # misc
-          clearurls
+            # misc
+            clearurls
 
-          # useful from time to time
-          tab-session-manager
-          tab-reloader
+            # useful from time to time
+            tab-session-manager
+            tab-reloader
 
-          # customisation
-          stylus
-          violentmonkey
+            # customisation
+            stylus
+            violentmonkey
 
-          # Steam
-          steam-database
+            # Steam
+            steam-database
 
-          # YouTube
-          sponsorblock
-          youtube-shorts-block
-          return-youtube-dislikes
+            # YouTube
+            sponsorblock
+            youtube-shorts-block
+            return-youtube-dislikes
 
-          # Reddit
-          old-reddit-redirect
-          reddit-enhancement-suite
-        ]) ++ lib.optional config.programs.plasma.enable pkgs.nur.repos.rycee.firefox-addons.plasma-integration;
+            # Reddit
+            old-reddit-redirect
+            reddit-enhancement-suite
+          ])
+          ++ lib.optional config.programs.plasma.enable pkgs.nur.repos.rycee.firefox-addons.plasma-integration;
 
         settings = {
           # Disable autofill & passwords
@@ -723,52 +736,55 @@ in
 
   programs.vscode = {
     enable = true;
-    extensions = (with pkgs.open-vsx; [
-      # make thing usable
-      vscodevim.vim
+    extensions =
+      (with pkgs.open-vsx; [
+        # make thing usable
+        vscodevim.vim
 
-      # theming
-      sainnhe.sonokai
-      pkief.material-icon-theme
+        # theming
+        sainnhe.sonokai
+        pkief.material-icon-theme
 
-      # language support
-      #bungcip.better-toml
-      tamasfe.even-better-toml
-      #ms-pyright.pyright # pylance is installed?
-      ms-python.python
-      ms-python.isort
-      svelte.svelte-vscode
-      jnoortheen.nix-ide
-      rust-lang.rust-analyzer
-      #ms-vscode.makefile-tools
-      wayou.vscode-todo-highlight
-      spgoding.datapack-language-server
-    ]) ++ (with pkgs.vscode-marketplace; [
-      # language support
-      geequlim.godot-tools
-      jcs090218.ellsp
-      lijin.yuescript
-      mrmlnc.vscode-json5
-      ms-vscode.cpptools
-      ronnidc.nunjucks
-      sumneko.lua
-      tnze.snbt
-      unifiedjs.vscode-mdx
-      vgalaktionov.moonscript
-      yesterday17.zenscript
-      ms-vscode.live-server
-      # this one broken somehow, bruh:
-      #rust-lang.rust-analyzer
+        # language support
+        #bungcip.better-toml
+        tamasfe.even-better-toml
+        #ms-pyright.pyright # pylance is installed?
+        ms-python.python
+        ms-python.isort
+        svelte.svelte-vscode
+        jnoortheen.nix-ide
+        rust-lang.rust-analyzer
+        #ms-vscode.makefile-tools
+        wayou.vscode-todo-highlight
+        spgoding.datapack-language-server
+      ])
+      ++ (with pkgs.vscode-marketplace; [
+        # language support
+        geequlim.godot-tools
+        jcs090218.ellsp
+        lijin.yuescript
+        mrmlnc.vscode-json5
+        ms-vscode.cpptools
+        ronnidc.nunjucks
+        sumneko.lua
+        tnze.snbt
+        unifiedjs.vscode-mdx
+        vgalaktionov.moonscript
+        yesterday17.zenscript
+        ms-vscode.live-server
+        samplekit.svelte-pp-shiki
+        # this one broken somehow, bruh:
+        #rust-lang.rust-analyzer
 
-      # GitHub
-      github.remotehub
-      github.vscode-pull-request-github
+        # GitHub
+        github.remotehub
+        github.vscode-pull-request-github
 
-      # remote dev
-      ms-vscode.remote-repositories
-      ms-vscode-remote.remote-ssh
-      ms-vscode-remote.remote-ssh-edit
-    ]);
+        # remote dev
+        ms-vscode.remote-repositories
+        ms-vscode-remote.remote-ssh
+        ms-vscode-remote.remote-ssh-edit
+      ]);
     userSettings = {
       # Vim controls
       #"extensions.experimental.affinity" = {
@@ -790,8 +806,10 @@ in
       "window.titleBarStyle" = "custom";
       "window.customTitleBarVisibility" = "auto";
 
-      "editor.fontFamily" = "'Maple Mono NF', 'Cartograph CF', 'FiraCode Nerd Font Mono', 'monospace', monospace";
-      "debug.console.fontFamily" = "'Maple Mono NF', 'Cartograph CF', 'FiraCode Nerd Font Mono', 'monospace', monospace";
+      "editor.fontFamily" =
+        "'Maple Mono NF', 'Cartograph CF', 'FiraCode Nerd Font Mono', 'monospace', monospace";
+      "debug.console.fontFamily" =
+        "'Maple Mono NF', 'Cartograph CF', 'FiraCode Nerd Font Mono', 'monospace', monospace";
       "editor.fontLigatures" = "'cv02', 'cv03', 'cv04'";
       "editor.fontVariations" = true;
       "editor.fontSize" = 13;
@@ -878,12 +896,6 @@ in
         "color-scheme" = color-scheme;
       };
     };
-
-  programs.neovim = {
-    enable = true;
-    viAlias = true;
-    vimAlias = true;
-  };
 
   #programs.anyrun = {
   #  enable = false;
