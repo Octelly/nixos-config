@@ -286,6 +286,7 @@
         smartRename.enable = true;
       };
 
+      # colour preview
       colorizer = {
         enable = true;
         settings.user_default_options = {
@@ -306,6 +307,7 @@
         };
       };
 
+      # see open buffers in a tab-like UI
       bufferline = {
         enable = true;
         settings.options.offsets = [
@@ -318,14 +320,11 @@
         ];
       };
 
+      # add a scrollbar
       scrollview = {
         enable = true;
         settings.signs_on_startup = [ "all" ];
       };
-
-      #mini-basics = {
-      #  enable = true;
-      #};
 
       # icons provider for nvim-tree, trouble and other plugins
       web-devicons.enable = true;
@@ -368,13 +367,17 @@
       };
 
       # completions and integrations
-      cmp.enable = true;
-
-      cmp-path.enable = true;
-      cmp-nvim-lsp.enable = true;
-      cmp-nvim-lsp-document-symbol.enable = true;
-      cmp-nvim-lsp-signature-help.enable = true;
-      cmp-treesitter.enable = true;
+      cmp = {
+        enable = true;
+        autoEnableSources = true;
+        settings.sources = [
+          { name = "nvim_lsp"; }
+          { name = "nvim_lsp_document_symbol"; }
+          { name = "nvim_lsp_signature_help"; }
+          { name = "path"; }
+          { name = "treesitter"; }
+        ];
+      };
 
       # UI framework of sorts that some plugins hook into
       fidget.enable = true;

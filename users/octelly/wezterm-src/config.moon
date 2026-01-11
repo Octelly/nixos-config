@@ -22,6 +22,10 @@ wezterm = require 'wezterm'
 	}
 	font_size: 10.0
 	bold_brightens_ansi_colors: false
+	window_content_alignment: {
+		horizontal: 'Center'
+		vertical: 'Center'
+	}
 
 	adjust_window_size_when_changing_font_size: false
 	enable_scroll_bar: true
@@ -38,8 +42,9 @@ wezterm = require 'wezterm'
 	cursor_blink_ease_in: "Constant"
 	cursor_blink_ease_out: "Constant"
 
+	--window_decorations: "INTEGRATED_BUTTONS"
 	window_background_opacity: 0.9
-	--window_background_opacity: 1
+	kde_window_background_blur: true
 	inactive_pane_hsb: {
 		saturation: 1
 		brightness: 0.9

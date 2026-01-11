@@ -33,6 +33,7 @@ wezterm.on 'update-status', (window, pane) ->
         overrides.enable_scroll_bar = nil
 
 	if string.find(string.lower(process.name), "nvim") or string.find(string.lower(process.executable), "nvim")
+		overrides.use_resize_increments = true
 		overrides.enable_scroll_bar = false
 		overrides.window_background_opacity = 1.0
 		overrides.window_padding = {
@@ -42,6 +43,7 @@ wezterm.on 'update-status', (window, pane) ->
 			bottom: 0
 		}
 	else
+		overrides.use_resize_increments = nil
 		overrides.enable_scroll_bar = nil
 		overrides.window_background_opacity = nil
 		overrides.window_padding = nil
