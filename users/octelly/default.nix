@@ -505,10 +505,10 @@ in
   };
 
   programs.floorp = {
-    enable = true;
+    #enable = true;
 
     # FIXME: temporary change until unstable builds again
-    package = pkgs.stable.floorp;
+    #package = pkgs.stable.floorp;
 
     nativeMessagingHosts = lib.optional config.programs.plasma.enable pkgs.kdePackages.plasma-browser-integration;
 

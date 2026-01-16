@@ -133,15 +133,16 @@
   };
 
   outputs =
-    { self
-    , nixpkgs
-    , nur
-    , f2k
-    , vscode-ext
-    , niri
-    , emacs-overlay
-    , ...
-    } @ inputs:
+    {
+      self,
+      nixpkgs,
+      nur,
+      f2k,
+      vscode-ext,
+      niri,
+      emacs-overlay,
+      ...
+    }@inputs:
     let
       inherit (lib.ext) importNixFiles mapHosts;
 
@@ -161,20 +162,23 @@
           ];
         };
 
-        overlays = importNixFiles ./overlays ++
-          [
-            nur.overlays.default
-            f2k.overlays.default
-            vscode-ext.overlays.default
-            niri.overlays.niri
-            emacs-overlay.overlay
-          ];
+        overlays = importNixFiles ./overlays ++ [
+          nur.overlays.default
+          f2k.overlays.default
+          vscode-ext.overlays.default
+          niri.overlays.niri
+          emacs-overlay.overlay
+        ];
       };
 
-      lib = nixpkgs.lib.extend (final: prev: {
-        ext = import ./lib
-          { inherit inputs repoConf; lib = prev; };
-      });
+      lib = nixpkgs.lib.extend (
+        final: prev: {
+          ext = import ./lib {
+            inherit inputs repoConf;
+            lib = prev;
+          };
+        }
+      );
 
     in
     {
