@@ -283,6 +283,8 @@
         treesitter = {
           enable = true;
 
+          nixvimInjections = true;
+
           # use tresitter as fold method
           folding = true;
         };
@@ -298,7 +300,8 @@
 
         # smart rename + some extras
         treesitter-refactor = {
-          enable = true;
+          #FIXME: uses a different treesitter version
+          #enable = true;
           highlightDefinitions.enable = true;
 
           # bound to 'grr' by default

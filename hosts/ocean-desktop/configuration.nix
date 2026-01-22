@@ -1,4 +1,10 @@
-{ config, pkgs, lib, ... }: {
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+{
 
   modules = {
     desktop = {
@@ -81,10 +87,14 @@
     enable = true;
     openFirewall = true;
   };
-  programs.adb.enable = true; # wired ALVR
+  #programs.adb.enable = true; # wired ALVR
   environment.systemPackages = with pkgs; [
-    wayvr-dashboard
-    wlx-overlay-s
+
+    android-tools
+
+    #wayvr-dashboard
+    #wlx-overlay-s
+    wayvr
 
     ydotool
 
@@ -94,11 +104,13 @@
   #boot.kernelPackages = lib.mkForce pkgs.unstable-znver3.linuxPackages_zen;
   #boot.kernelPackages = lib.mkForce (pkgs.linuxPackages_cachyos-lto.cachyOverride {
   # no LTO, Clang breaks vmware
-  boot.kernelPackages = lib.mkForce (pkgs.linuxPackages_cachyos.cachyOverride {
-    mArch = "GENERIC_V3";
-    ticksHz = 1000;
-    hugePages = "madvise";
-  });
+  boot.kernelPackages = lib.mkForce (
+    pkgs.linuxPackages_cachyos.cachyOverride {
+      mArch = "GENERIC_V3";
+      ticksHz = 1000;
+      hugePages = "madvise";
+    }
+  );
 
   services.ananicy = {
     enable = true;
@@ -149,7 +161,6 @@
     # have vfio-pci grab the RX 560 on boot
     "options vfio-pci ids=1002:67ef,1002:aae0"
   ];
-
 
   # required for NixOS SteamVR to work
   # https://wiki.nixos.org/wiki/VR/en#SteamVR

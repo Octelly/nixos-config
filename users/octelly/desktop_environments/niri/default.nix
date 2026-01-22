@@ -24,7 +24,8 @@
     ./swaync.nix
 
     # App launcher / search
-    ./gauntlet.nix
+    # FIXME: gauntlet doesn't build currently
+    #./gauntlet.nix
 
   ];
 
@@ -47,7 +48,11 @@
     config.niri = {
       "org.freedesktop.impl.portal.ScreenCast" = [ "gnome" ];
 
-      default = [ "kwallet" "gtk" "kde" ];
+      default = [
+        "kwallet"
+        "gtk"
+        "kde"
+      ];
     };
   };
 
@@ -58,50 +63,57 @@
     _JAVA_AWT_WM_NONREPARENTING = 1;
   };
 
+  programs.niri.settings.binds =
+    with config.lib.niri.actions;
+    let
+      sh = spawn "sh" "-c";
+    in
+    {
+      # NOTE:
+      # `Mod` is a special modifier that is equal to `Super` when running niri on a TTY,
+      # and to `Alt` when running niri as a nested winit window
+      "Mod+Return" = {
+        action = spawn "wezterm";
+        hotkey-overlay.title = "Open Terminal";
+      };
+      "Mod+Shift+q" = {
+        action = quit;
+        hotkey-overlay.title = "Logout";
+      };
 
-  programs.niri.settings.binds = with config.lib.niri.actions; let
-    sh = spawn "sh" "-c";
-  in
-  {
-    # NOTE:
-    # `Mod` is a special modifier that is equal to `Super` when running niri on a TTY,
-    # and to `Alt` when running niri as a nested winit window
-    "Mod+Return" = {
-      action = spawn "wezterm";
-      hotkey-overlay.title = "Open Terminal";
+      "Mod+q".action = close-window;
+      "Mod+d".action = fullscreen-window;
+      "Control+Mod+Space".action = toggle-window-floating;
+
+      "Mod+WheelScrollDown".action = focus-workspace-down;
+      "Mod+WheelScrollUp".action = focus-workspace-up;
+
+      "Mod+Shift+WheelScrollUp".action = focus-column-left;
+      "Mod+Shift+WheelScrollDown".action = focus-column-right;
+      "Mod+WheelScrollLeft".action = focus-column-left;
+      "Mod+WheelScrollRight".action = focus-column-right;
+
+      "Mod+Tab".action = toggle-overview;
+
+      "Mod+w" = {
+        action = spawn (
+          builtins.toString (
+            pkgs.writeScript "maximize" ''
+              niri msg action expand-column-to-available-width;
+              niri msg action reset-window-height;
+            ''
+          )
+        );
+        hotkey-overlay.title = "Maximize Window";
+      };
     };
-    "Mod+Shift+q" = {
-      action = quit;
-      hotkey-overlay.title = "Logout";
-    };
-
-    "Mod+q".action = close-window;
-    "Mod+d".action = fullscreen-window;
-    "Control+Mod+Space".action = toggle-window-floating;
-
-    "Mod+WheelScrollDown".action = focus-workspace-down;
-    "Mod+WheelScrollUp".action = focus-workspace-up;
-
-    "Mod+Shift+WheelScrollUp".action = focus-column-left;
-    "Mod+Shift+WheelScrollDown".action = focus-column-right;
-    "Mod+WheelScrollLeft".action = focus-column-left;
-    "Mod+WheelScrollRight".action = focus-column-right;
-
-    "Mod+Tab".action = toggle-overview;
-
-    "Mod+w" = {
-      action = spawn
-        (builtins.toString (pkgs.writeScript "maximize" ''
-          niri msg action expand-column-to-available-width;
-          niri msg action reset-window-height;
-        ''));
-      hotkey-overlay.title = "Maximize Window";
-    };
-  };
 
   programs.niri.settings.outputs = {
     "PNP(BNQ) BenQ RL2455 84E04417SL0" = {
-      position = { x = -1080; y = 0; };
+      position = {
+        x = -1080;
+        y = 0;
+      };
       transform.rotation = 270;
     };
     "PNP(AOC) 24G2W1G3- 1J4PBHA005536" = {
