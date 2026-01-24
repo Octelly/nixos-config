@@ -327,14 +327,17 @@
         # see open buffers in a tab-like UI
         bufferline = {
           enable = true;
-          settings.options.offsets = [
-            {
-              filetype = "NvimTree";
-              text = "meow~ :3";
-              highlight = "Directory";
-              separator = true;
-            }
-          ];
+          settings.options = {
+            separator_style = "slant";
+            offsets = [
+              {
+                filetype = "NvimTree";
+                text = "meow~ :3";
+                highlight = "Directory";
+                separator = true;
+              }
+            ];
+          };
         };
 
         # add a scrollbar
