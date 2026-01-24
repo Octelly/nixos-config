@@ -114,38 +114,38 @@
       };
 
       extraConfigLua = ''
-                -- font to be used in GUIs such as Neovide
-                vim.o.guifont = "Maple Mono NF:h12"
+        -- font to be used in GUIs such as Neovide
+        vim.o.guifont = "Maple Mono NF:h12"
 
-                -- check if Neovide options are available
-                if vim.g.neovide then
-                  vim.g.neovide_hide_mouse_when_typing = true
-                  vim.g.neovide_remember_window_size = true
-                  vim.g.neovide_cursor_animate_in_insert_mode = false
-                  vim.g.neovide_cursor_vfx_mode = "railgun"
-                end
+        -- check if Neovide options are available
+        if vim.g.neovide then
+          vim.g.neovide_hide_mouse_when_typing = true
+          vim.g.neovide_remember_window_size = true
+          vim.g.neovide_cursor_animate_in_insert_mode = false
+          vim.g.neovide_cursor_vfx_mode = "railgun"
+        end
 
-                vim.api.nvim_create_autocmd('FileType', {
-                  pattern = 'jrnl',
-                  callback = function ()
-                    vim.schedule(function ()
-                      require("zen-mode").open({
-                        window = {
-                          width = 78,
-                          options = {
-                            signcolumn = "no",
-                            number = false,
-                            relativenumber = false,
-                            cursorcolumn = false,
-                            foldcolumn = "0"
-                          }
-                        }
-                      })
-                      vim.o.foldenable = false
-        			  vim.o.textwidth = 0
-                    end)
-                  end,
-                })
+        vim.api.nvim_create_autocmd('FileType', {
+          pattern = 'jrnl',
+          callback = function ()
+            vim.schedule(function ()
+              require("zen-mode").open({
+                window = {
+                  width = 78,
+                  options = {
+                    signcolumn = "no",
+                    number = false,
+                    relativenumber = false,
+                    cursorcolumn = false,
+                    foldcolumn = "0"
+                  }
+                }
+              })
+              vim.o.foldenable = false
+              vim.o.textwidth = 0
+            end)
+          end,
+        })
       '';
 
       # https://editorconfig.org/
@@ -283,10 +283,13 @@
         treesitter = {
           enable = true;
 
+          highlight.enable = true;
+
+          # renders extraConfigLua as LUA
           nixvimInjections = true;
 
           # use tresitter as fold method
-          folding = true;
+          folding.enable = true;
         };
 
         # keep definition of nested functions and such pinned on top
