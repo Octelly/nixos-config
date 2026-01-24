@@ -56,6 +56,20 @@
 
       highlightOverride = {
         CmpItemMenu.italic = true;
+
+        # FIXME: incorrectly set jrnl highlights
+        JrnlDate = {
+          fg = "NONE";
+          bg = "NONE";
+          force = true;
+        };
+        JrnlEntryLine = {
+          fg = "NONE";
+          bg = "NONE";
+          underline = false;
+          bold = true;
+          force = true;
+        };
       };
 
       opts = {
@@ -128,6 +142,7 @@
                 }
               })
               vim.o.foldenable = false
+              vim.o.textwidth = 0
             end)
           end,
         })
@@ -268,10 +283,13 @@
         treesitter = {
           enable = true;
 
+          highlight.enable = true;
+
+          # renders extraConfigLua as LUA
           nixvimInjections = true;
 
           # use tresitter as fold method
-          folding = true;
+          folding.enable = true;
         };
 
         # keep definition of nested functions and such pinned on top
@@ -474,6 +492,8 @@
 
             options = {
               globalstatus = true;
+
+              disabled_filetypes = [ "jrnl" ];
 
               sectionSeparators = {
                 left = "";
