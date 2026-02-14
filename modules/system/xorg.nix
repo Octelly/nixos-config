@@ -49,12 +49,12 @@ in {
         inherit (cfg) dpi;
         enable = true;
         xkb.layout = cfg.layout;
-        displayManager = {
-          lightdm = {
-            enable = true;
-            greeters.slick.enable = true;
-          };
-        };
+        #displayManager = {
+        #  lightdm = {
+        #    enable = true;
+        #    greeters.slick.enable = true;
+        #  };
+        #};
 
         # FIXME: this shouldn't be reliant on Xorg as it is used by Wayland too
         #        - Octelly

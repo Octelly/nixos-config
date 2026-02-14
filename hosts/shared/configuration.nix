@@ -153,6 +153,9 @@
       wireguard-tools
       xclip
       zip
+      kdePackages.qtsvg # sddm Dependency
+      kdePackages.qtmultimedia # sddm Dependency
+      kdePackages.qtvirtualkeyboard # sddm Dependency
     ]
     # adds PolicyKit rules
     ++ lib.optional config.services.desktopManager.plasma6.enable pkgs.kdePackages.kpmcore
@@ -230,6 +233,16 @@
   systemd.services.NetworkManager-wait-online.enable = false;
 
   services = {
+
+    displayManager.sddm = {
+      enable = true;
+      theme = "${pkgs.sddm-astronaut.override { embeddedTheme = "purple_leaves";}}/share/sddm/themes/sddm-astronaut-theme";
+      wayland = {
+        enable = true;
+        compositor = "kwin";
+      };
+    };
+
     dbus = {
       enable = true;
       dbusPackage = pkgs.dbus.override {
@@ -327,3 +340,5 @@
   #system.etc.overlay.enable = lib.mkDefault true; # WARN: EXPERIMENTAL
   system.tools.nixos-generate-config.enable = lib.mkDefault false;
 }
+
+
