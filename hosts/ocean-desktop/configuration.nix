@@ -1,8 +1,6 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ pkgs
+, lib
+, ...
 }:
 {
 
@@ -104,17 +102,18 @@
   #boot.kernelPackages = lib.mkForce pkgs.unstable-znver3.linuxPackages_zen;
   #boot.kernelPackages = lib.mkForce (pkgs.linuxPackages_cachyos-lto.cachyOverride {
   # no LTO, Clang breaks vmware
-  boot.kernelPackages = lib.mkForce (
-    pkgs.linuxPackages_cachyos.cachyOverride {
-      mArch = "GENERIC_V3";
-      ticksHz = 1000;
-      hugePages = "madvise";
-    }
-  );
+  #boot.kernelPackages = lib.mkForce (
+  #  pkgs.linuxPackages_cachyos.cachyOverride {
+  #    mArch = "GENERIC_V3";
+  #    ticksHz = 1000;
+  #    hugePages = "madvise";
+  #  }
+  #);
+  boot.kernelPackages = lib.mkForce pkgs.cachyosKernels.linuxPackages-cachyos-latest-x86_64-v3;
 
   services.ananicy = {
     enable = true;
-    rulesProvider = pkgs.ananicy-rules-cachyos_git;
+    rulesProvider = pkgs.ananicy-rules-cachyos;
   };
   # NOTE: should not be mixed with ananicy
   modules.desktop.gaming.utils.gamemode = lib.mkForce false;
@@ -166,16 +165,16 @@
   # https://wiki.nixos.org/wiki/VR/en#SteamVR
   # WARN: requires compiling the kernel
   # NOTE: opportunity taken to compile with znver3 optimizations (see above)
-  boot.kernelPatches = [
-    {
-      name = "amdgpu-ignore-ctx-privileges";
-      patch = pkgs.fetchpatch {
-        name = "cap_sys_nice_begone.patch";
-        url = "https://github.com/Frogging-Family/community-patches/raw/master/linux61-tkg/cap_sys_nice_begone.mypatch";
-        hash = "sha256-Y3a0+x2xvHsfLax/uwycdJf3xLxvVfkfDVqjkxNaYEo=";
-      };
-    }
-  ];
+  #boot.kernelPatches = [
+  #  {
+  #    name = "amdgpu-ignore-ctx-privileges";
+  #    patch = pkgs.fetchpatch {
+  #      name = "cap_sys_nice_begone.patch";
+  #      url = "https://github.com/Frogging-Family/community-patches/raw/master/linux61-tkg/cap_sys_nice_begone.mypatch";
+  #      hash = "sha256-Y3a0+x2xvHsfLax/uwycdJf3xLxvVfkfDVqjkxNaYEo=";
+  #    };
+  #  }
+  #];
 
   services.flatpak.enable = true;
 

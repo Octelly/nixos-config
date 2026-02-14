@@ -10,7 +10,6 @@ lib.nixosSystem {
       networking.hostName = "ocean-t460";
     }
 
-    inputs.chaotic.nixosModules.default
     inputs.determinate.nixosModules.default
     inputs.home.nixosModules.home-manager
     inputs.lsfg-vk-flake.nixosModules.default

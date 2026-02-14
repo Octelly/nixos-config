@@ -1,11 +1,10 @@
-{
-  config,
-  nixConfig,
-  inputs,
-  lib,
-  pkgs,
-  system,
-  ...
+{ config
+, nixConfig
+, inputs
+, lib
+, pkgs
+, system
+, ...
 }:
 
 let
@@ -46,7 +45,8 @@ let
       cp -r Posy* $out/share/icons/
     '';
   };
-  klassy = pkgs.nur.repos.shadowrz.klassy-qt6;
+  klassy = pkgs.klassy;
+  #klassy = pkgs.nur.repos.shadowrz.klassy-qt6;
   #klassy = with pkgs; (stdenv.mkDerivation rec {
   #  pname = "klassy";
   #  #version = "6.2.breeze6.2.1";

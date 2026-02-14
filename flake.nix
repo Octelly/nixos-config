@@ -8,7 +8,7 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "unstable";
     };
-    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable"; # do not add follows
+    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release"; # do not add follows
     plasma-manager = {
       url = "github:pjones/plasma-manager";
       inputs.nixpkgs.follows = "unstable";
@@ -133,15 +133,15 @@
   };
 
   outputs =
-    {
-      self,
-      nixpkgs,
-      nur,
-      f2k,
-      vscode-ext,
-      niri,
-      emacs-overlay,
-      ...
+    { self
+    , nixpkgs
+    , nur
+    , f2k
+    , vscode-ext
+    , niri
+    , emacs-overlay
+    , nix-cachyos-kernel
+    , ...
     }@inputs:
     let
       inherit (lib.ext) importNixFiles mapHosts;
@@ -168,6 +168,7 @@
           vscode-ext.overlays.default
           niri.overlays.niri
           emacs-overlay.overlay
+          nix-cachyos-kernel.overlays.pinned
         ];
       };
 

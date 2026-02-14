@@ -10,7 +10,6 @@ lib.nixosSystem {
       networking.hostName = "ocean-desktop";
     }
 
-    inputs.chaotic.nixosModules.default
     inputs.determinate.nixosModules.default
     inputs.eden-emu.nixosModules.default
     inputs.home.nixosModules.home-manager

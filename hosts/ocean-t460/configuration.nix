@@ -57,7 +57,7 @@
 
   services.ananicy = {
     enable = true;
-    rulesProvider = pkgs.ananicy-rules-cachyos_git;
+    rulesProvider = pkgs.ananicy-rules-cachyos;
   };
   # NOTE: should not be mixed with ananicy
   modules.desktop.gaming.utils.gamemode = lib.mkForce false;
