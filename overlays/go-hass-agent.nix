@@ -5,71 +5,30 @@ final: prev: {
     let
       gh-owner = "joshuar";
       gh-repo = "go-hass-agent";
-      version = "14.1.1";
+      version = "14.9.0";
 
       src = prev.fetchFromGitHub {
         owner = "joshuar";
         repo = "go-hass-agent";
-        rev = "refs/tags/v${version}";
-        hash = "sha256-kWrMBbSbq5DoQZdy/OgL7p9iOSNiCFn0lcZCOKihaVo=";
+        tag = "v${version}";
+        hash = "sha256-vY2a4nSjRzs3QahPXgKIe1YGzp7FRMxscsCP9VH9fYg=";
       };
 
-      frontend-node_modules = prev.stdenv.mkDerivation {
-        pname = "go-hass-agent-frontend-node_modules";
+      nodeAssets = prev.buildNpmPackage {
+        pname = "go-hass-agent-assets";
         inherit src version;
-        impureEnvVars = lib.fetchers.proxyImpureEnvVars
-          ++ [ "GIT_PROXY_COMMAND" "SOCKS_SERVER" ];
-        nativeBuildInputs = [ prev.bun ];
-        dontConfigure = true;
-        buildPhase = ''
-          bun install --no-progress --frozen-lockfile
-        '';
 
-        # NOTE: based on
-        # https://github.com/NixOS/nixpkgs/blob/804c952399902e210ca8a0505ddc18e1eb34f17a/pkgs/by-name/he/helix-gpt/package.nix
-        # had to add removal of cache to get rid of broken symlinks
-        installPhase = ''
-          mkdir -p $out/node_modules
-
-          cp -R ./node_modules $out
-
-          rm -rf $out/node_modules/.cache
-        '';
-        outputHash = "sha256-83l2P4uYfFuQng4s5lBzYgOqaRlrlQTD1zpR7GLUDm4=";
-        outputHashAlgo = "sha256";
-        outputHashMode = "recursive";
-      };
-
-      frontend = prev.stdenv.mkDerivation {
-        pname = "go-hass-agent-frontend";
-        inherit version src;
-
-        nativeBuildInputs = [ prev.bun prev.tailwindcss_4 ];
-
-        dontConfigure = true;
-
-        LD_LIBRARY_PATH = "${lib.makeLibraryPath [prev.stdenv.cc.cc]}";
-
+        npmDepsHash = "sha256-rScsGZMdyd8chY380MxZEA6OkwqkH46LlvjCTBOohfE=";
         buildPhase = ''
           runHook preBuild
-
-          ln -s ${frontend-node_modules}/node_modules .
-
-          bun run build:js
-          tailwindcss -i ./web/assets/styles.css -o ./web/content/styles.css --minify --map
-
-          # bun run build:css
-          # this just returns 1 and doesn't do anything
-
+          npm run build:js
+          npm run build:css
           runHook postBuild
         '';
-
         installPhase = ''
           runHook preInstall
-
           mkdir -p $out
-          cp -r web/content/* $out/
-
+          cp -r web $out/
           runHook postInstall
         '';
       };
@@ -93,22 +52,22 @@ final: prev: {
         })
       ];
 
-      vendorHash = "sha256-VRjL4p1UIvWrXOI++cgxVpFhNCE49KTNMwOCrWKtruQ=";
+      vendorHash = "sha256-Lbctnz/YV8taCHpJG9XnheT0W4mVxDlewb/nTP5WnHU=";
 
       preBuild = ''
-        cp -r ${frontend}/* web/content/
+        cp -r ${nodeAssets}/web .
       '';
 
       ldflags = [
-        "-s"
         "-w"
-        "-X github.com/joshuar/go-hass-agent/config.AppVersion=${version}"
+        "-s"
+        "-X github.com/joshuar/go-hass-agent/config.AppVersion=${version}-nixpkgs"
       ];
 
       meta = {
         description = "A Home Assistant, native app for desktop/laptop devices.";
         homepage = "https://github.com/${gh-owner}/${gh-repo}";
-        changelog = "https://github.com/joshuar/go-hass-agent/blob/${src.rev}/CHANGELOG.md";
+        changelog = "https://github.com/joshuar/go-hass-agent/releases/tag/v${version}";
         license = lib.licenses.mit;
         mainProgram = "go-hass-agent";
         platforms = lib.platforms.linux;

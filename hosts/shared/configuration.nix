@@ -225,8 +225,8 @@
       source = lib.getExe pkgs.go-hass-agent;
       owner = "root";
       group = "root";
-      # https://github.com/joshuar/go-hass-agent/blob/22920ac0545c9804103fc350377f359aabd1f886/assets/postinstall.sh#L9
-      capabilities = "cap_sys_rawio,cap_sys_admin,cap_mknod,cap_dac_override=+ep";
+      # https://github.com/joshuar/go-hass-agent/blob/3bb5cf993bb88522a88b3892e556ab0f4f5a342f/assets/postinstall.sh
+      capabilities = "cap_setgid,cap_setuid,cap_sys_rawio,cap_sys_admin,cap_mknod,cap_dac_override=+ep";
     };
   };
 
