@@ -349,9 +349,9 @@ in
 
       # plasma theme thing
       breeze-icons-chameleon
-      inputs.darkly.packages."${system}".darkly-qt6
-      inputs.kwin-effects-forceblur.packages.${pkgs.system}.default
-      kde-rounded-corners
+      #inputs.darkly.packages."${system}".darkly-qt6
+      #inputs.kwin-effects-forceblur.packages.${pkgs.system}.default
+      #kde-rounded-corners
       klassy
       plasma-panel-colorizer
       plasma-wallpaper-effects
