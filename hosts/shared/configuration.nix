@@ -234,14 +234,18 @@
 
   services = {
 
-    displayManager.sddm = {
+    displayManager.plasma-login-manager = {
       enable = true;
-      theme = "${pkgs.sddm-astronaut.override { embeddedTheme = "purple_leaves";}}/share/sddm/themes/sddm-astronaut-theme";
-      wayland = {
-        enable = true;
-        compositor = "kwin";
-      };
     };
+
+    #displayManager.sddm = {
+    #  enable = true;
+    #  theme = "${pkgs.sddm-astronaut.override { embeddedTheme = "purple_leaves";}}/share/sddm/themes/sddm-astronaut-theme";
+    #  wayland = {
+    #    enable = true;
+    #    compositor = "kwin";
+    #  };
+    #};
 
     dbus = {
       enable = true;
