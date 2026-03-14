@@ -28,8 +28,10 @@ in
     };
 
     sony = {
+      ps1 = mkEnableOption "Playstation 1";
       ps2 = mkEnableOption "Playstation 2";
       ps3 = mkEnableOption "Playstation 3";
+      ps4 = mkEnableOption "Playstation 4";
       psp = mkEnableOption "Playstation Portable";
     };
 
@@ -54,14 +56,16 @@ in
 
     modules.desktop.gaming.utils.rusty-psn = mkDefault cfg.sony.ps3;
 
-    modules.desktop.gaming.emulation.retroarch_cores = with pkgs.libretro;
-      optional cfg.nce.pc_engine beetle-pce
+    modules.desktop.gaming.emulation.retroarch_cores = with pkgs.libretro; [ ]
+      ++ optional cfg.nce.pc_engine beetle-pce
       ++ optional cfg.nintendo.ds melonds
       ++ optional cfg.nintendo.gb gambatte
       ++ optional cfg.nintendo.gba mgba
       ++ optional cfg.nintendo.nes mesen
       ++ optional cfg.nintendo.snes bsnes-hd
-      ++ optional cfg.sony.psp ppsspp;
+      ++ optional cfg.sony.ps1 beetle-psx
+      ++ optional cfg.sony.psp ppsspp
+    ;
 
     # enable DSU client by default for emulators with support
     modules.desktop.gaming.emulation.dsu_client = mkIf
@@ -71,14 +75,15 @@ in
       ]))
       (mkDefault true);
 
-    environment.systemPackages = with pkgs;
-      optional (cfg.nintendo.gamecube || cfg.nintendo.wii) dolphin-emu
-      ++ optional (cfg.retroarch_cores != [ ]) (retroarch.withCores (_: cfg.retroarch_cores))
+    environment.systemPackages = with pkgs; [ ]
+      ++ optional (cfg.nintendo.gamecube || cfg.nintendo.wii) dolphin-emu
       ++ optional cfg.dsu_client evdevhook2
       ++ optional cfg.nintendo.primehack dolphin-emu-primehack
       ++ optional cfg.nintendo.switch ryubing # maintained Ryujinx fork
       ++ optional cfg.sony.ps2 pcsx2 # libretro core doesn't support RetroAchievements
       ++ optional cfg.sony.ps3 rpcs3
+      ++ optional cfg.sony.ps4 shadps4
+      ++ optionals (cfg.retroarch_cores != [ ]) [ (retroarch.withCores (_: cfg.retroarch_cores)) libretro-shaders-slang retroarch-joypad-autoconfig ]
     ;
   };
 }

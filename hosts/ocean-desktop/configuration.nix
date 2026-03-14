@@ -25,8 +25,10 @@
             wii = true;
           };
           sony = {
-            ps3 = true;
+            ps1 = true;
             ps2 = true;
+            ps3 = true;
+            ps4 = true;
             psp = true;
           };
         };
@@ -200,12 +202,14 @@
 
   networking.firewall.allowedTCPPorts = [
     25565 # minecra
+    42420 # vintage story
 
     # NOTE: stale, not used in a long while, to be tested and re-enabled if needed
     #3216 # EA App
   ];
   networking.firewall.allowedUDPPorts = [
     25565 # minecra
+    42420 # vintage story
 
     # NOTE: stale, not used in a long while, to be tested and re-enabled if needed
     #3216 # EA App
