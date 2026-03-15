@@ -177,11 +177,11 @@ in
 {
   home = {
     packages = with pkgs; [
-      #warble
+      maple-mono.NF
 
       #pavucontrol
-      pulsemixer
-      maple-mono.NF
+      #pulsemixer
+      wiremix
       #ranger
 
       ffmpeg-full
@@ -314,8 +314,10 @@ in
       #})
 
       stable.jellyfin-media-player
-      moonlight-qt
       grayjay
+      feishin
+
+      moonlight-qt
 
       tail-tray
 
