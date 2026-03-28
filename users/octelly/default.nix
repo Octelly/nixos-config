@@ -369,6 +369,7 @@ in
       kdePackages.ktorrent
       kdePackages.partitionmanager
       qdiskinfo
+      kid3
 
       # spelling stuff
       # is also used by Plasma
