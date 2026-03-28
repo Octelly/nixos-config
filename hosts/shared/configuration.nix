@@ -153,9 +153,9 @@
       wireguard-tools
       xclip
       zip
-      kdePackages.qtsvg # sddm Dependency
-      kdePackages.qtmultimedia # sddm Dependency
-      kdePackages.qtvirtualkeyboard # sddm Dependency
+      #kdePackages.qtsvg # sddm Dependency
+      #kdePackages.qtmultimedia # sddm Dependency
+      #kdePackages.qtvirtualkeyboard # sddm Dependency
     ]
     # adds PolicyKit rules
     ++ lib.optional config.services.desktopManager.plasma6.enable pkgs.kdePackages.kpmcore
