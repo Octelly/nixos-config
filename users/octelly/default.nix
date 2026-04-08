@@ -353,11 +353,11 @@ in
       breeze-icons-chameleon
       #inputs.darkly.packages."${system}".darkly-qt6
       #inputs.kwin-effects-forceblur.packages.${pkgs.system}.default
-      #kde-rounded-corners
+      kde-rounded-corners
       klassy
       plasma-panel-colorizer
       plasma-wallpaper-effects
-      python313Packages.kde-material-you-colors
+      python314Packages.kde-material-you-colors
 
       # GTK theme
       adw-gtk3
