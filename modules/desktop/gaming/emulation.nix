@@ -10,6 +10,8 @@ in
   options.modules.desktop.gaming.emulation = {
     enable = mkEnableOption "the emulation module";
 
+    arcade = mkEnableOption "Arcade (Fireburn Neo)";
+
     nce = {
       pc_engine = mkEnableOption "PC Engine / TurboGrafx-16";
     };
@@ -57,6 +59,7 @@ in
     modules.desktop.gaming.utils.rusty-psn = mkDefault cfg.sony.ps3;
 
     modules.desktop.gaming.emulation.retroarch_cores = with pkgs.libretro; [ ]
+      ++ optional cfg.arcade fbneo
       ++ optional cfg.nce.pc_engine beetle-pce
       ++ optional cfg.nintendo.ds pkgs.melonds-ds
       ++ optional cfg.nintendo.gb gambatte

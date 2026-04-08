@@ -13,6 +13,7 @@
         sunshine.enable = true;
         emulation = {
           enable = true;
+          arcade = true;
           nce.pc_engine = true;
           nintendo = {
             ds = true;
