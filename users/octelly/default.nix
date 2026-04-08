@@ -371,6 +371,9 @@ in
       qdiskinfo
       kid3
 
+      engrampa
+      p7zip
+
       # spelling stuff
       # is also used by Plasma
       aspell
