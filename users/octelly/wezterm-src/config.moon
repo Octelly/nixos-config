@@ -20,7 +20,7 @@ wezterm = require 'wezterm'
 		'Maple Mono NF'
 		'Twemoji'
 	}
-	font_size: 10.0
+	font_size: 9.0
 	bold_brightens_ansi_colors: false
 	window_content_alignment: {
 		horizontal: 'Center'
