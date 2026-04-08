@@ -58,7 +58,7 @@ in
 
     modules.desktop.gaming.emulation.retroarch_cores = with pkgs.libretro; [ ]
       ++ optional cfg.nce.pc_engine beetle-pce
-      ++ optional cfg.nintendo.ds melonds
+      ++ optional cfg.nintendo.ds pkgs.melonds-ds
       ++ optional cfg.nintendo.gb gambatte
       ++ optional cfg.nintendo.gba mgba
       ++ optional cfg.nintendo.nes mesen
