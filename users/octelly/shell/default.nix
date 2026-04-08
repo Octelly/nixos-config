@@ -1,24 +1,51 @@
 { lib, pkgs, ... }:
 {
-  programs.nushell = {
+  #programs.nushell = {
+  #  enable = true;
+
+  #  configFile.text = ''
+  #    $env.config = {
+  #      show_banner: false,
+  #      edit_mode: vi
+  #    }
+  #  '';
+  #};
+
+  home.shell.enableZshIntegration = true;
+
+  programs.zsh = {
     enable = true;
 
-    configFile.text = ''
-      $env.config = {
-        show_banner: false,
-        edit_mode: vi
-      }
-    '';
+    # integrate with terminal
+    enableVteIntegration = true;
+
+    autocd = true;
+
+    autosuggestion = {
+      enable = true;
+      strategy = [ "match_prev_cmd" "completion" "history" ];
+    };
+
+    history = {
+      append = true;
+      extended = true;
+    };
+
+    historySubstringSearch.enable = true;
+
+    syntaxHighlighting.enable = true;
   };
 
   programs.carapace = {
     # all in one autocompletion
     # supports: https://carapace-sh.github.io/carapace-bin/completers.html
     enable = true;
+    enableZshIntegration = true;
   };
 
   programs.starship = {
     enable = true;
+    enableZshIntegration = true;
 
     settings = {
       add_newline = true;
