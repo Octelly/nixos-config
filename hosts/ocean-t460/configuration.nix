@@ -53,7 +53,7 @@
   virtualisation.waydroid.enable = true;
 
   # can use Clang here, no special kernel modules (vmware) used
-  boot.kernelPackages = lib.mkForce pkgs.linuxPackages_cachyos-lto;
+  boot.kernelPackages = lib.mkForce pkgs.cachyosKernels.linuxPackages-cachyos-latest-lto;
 
   services.ananicy = {
     enable = true;
