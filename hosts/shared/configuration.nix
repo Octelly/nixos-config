@@ -206,10 +206,10 @@
       flake = "/etc/nixos";
     };
 
-    niri = {
-      enable = true;
-      package = pkgs.niri-unstable;
-    };
+    #niri = {
+    #  enable = true;
+    #  package = pkgs.niri-unstable;
+    #};
   };
 
   # gtklock access to password verification (PAM)
@@ -253,6 +253,8 @@
         systemdMinimal = config.systemd.package;
       };
     };
+
+    resolved.enable = true;
 
     # firmware updates (you probably call it BIOS)
     # Required for "Firmware Security" page of KDE's Info Center
@@ -335,6 +337,7 @@
 
   # inspired by perlless profile
   # https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/profiles/perlless.nix
+  boot.initrd.services.resolved.enable = true;
   boot.initrd.systemd.enable = lib.mkDefault true;
   boot.initrd.systemd.fido2.enable = lib.mkDefault false;
   documentation.info.enable = lib.mkDefault false;

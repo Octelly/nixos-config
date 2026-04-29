@@ -196,6 +196,8 @@ in
       vesktop
       telegram-desktop
 
+      discordchatexporter-desktop
+
       # Matrix clients
       #beeper
       # - doesn't count
@@ -236,7 +238,11 @@ in
 
       localsend
 
-      appimage-run
+      (appimage-run.override {
+        extraPkgs = pkgs: with pkgs; [
+          icu
+        ];
+      })
 
       heroic
       r2modman
@@ -348,6 +354,7 @@ in
       xonotic-glx
       #emulationstation-de
       #inputs.aagl.packages.${pkgs.system}.sleepy-launcher
+      mcaselector
 
       # plasma theme thing
       breeze-icons-chameleon
@@ -369,7 +376,6 @@ in
       kdePackages.ktorrent
       kdePackages.partitionmanager
       qdiskinfo
-      kid3
 
       engrampa
       p7zip
@@ -411,6 +417,9 @@ in
       qpwgraph
       bleachbit
       drawy
+
+      picard
+      kid3
 
       #inputs.wezterm.packages.${system}.default
       wezterm
@@ -490,19 +499,18 @@ in
   programs.mpv = {
     enable = true;
     config = {
-
       # replaced by uosc
       osd-bar = false;
       border = false;
-
     };
 
     scripts = with pkgs.mpvScripts; [
-      uosc # better OSD
-      thumbfast # thumbnails for hover
+      evafast # VHS-style seeking
       mpris # media controls integration
       reload # automatic reload for stuck online videos
       sponsorblock
+      thumbfast # thumbnails for hover
+      uosc # better OSD
     ];
 
     scriptOpts.thumbfast = {
@@ -942,18 +950,43 @@ in
     mime.enable = true;
     mimeApps = rec {
       enable = true;
-      defaultApplications = {
-        "video" = [ "mpv.desktop" ];
-        "audio" = [ "mpv.desktop" ];
-        "text" = [ "nvim.desktop" ];
+      defaultApplications =
+        let
+          video = "mpv.desktop";
+          image = "org.kde.gwenview.desktop";
+          web = "re.sonny.Junction.desktop";
+          editor = "${config.home.sessionVariables.EDITOR}.desktop";
+        in
+        {
+          "video" = video;
+          "audio" = video;
+          "image" = image;
+          "text" = editor;
 
-        "default-web-browser" = [ "re.sonny.Junction.desktop" ];
-        "text/html" = [ "re.sonny.Junction.desktop" ];
-        "x-scheme-handler/http" = [ "re.sonny.Junction.desktop " ];
-        "x-scheme-handler/https" = [ "re.sonny.Junction.desktop " ];
-        "x-scheme-handler/unknown" = [ "re.sonny.Junction.desktop " ];
-      };
+          "video/*" = video;
+          "audio/*" = video;
+          "image/*" = image;
+          "text/*" = editor;
+
+          "default-web-browser" = web;
+          "text/html" = web;
+          "x-scheme-handler/http" = web;
+          "x-scheme-handler/https" = web;
+          "x-scheme-handler/unknown" = web;
+          "application/x-extension-htm" = web;
+          "application/x-extension-xht" = web;
+          "application/x-extension-html" = web;
+          "application/x-extension-shtml" = web;
+          "application/x-extension-xhtml" = web;
+
+          "terminal" = "org.wezfurlong.wezterm.desktop";
+        };
       associations.added = defaultApplications;
+    };
+
+    terminal-exec = {
+      enable = true;
+      settings.default = [ "org.wezfurlong.wezterm.desktop" ];
     };
 
     portal = {
@@ -1000,6 +1033,7 @@ in
     dataFile."color-schemes/Libadw-light.colors".source = ./Libadw-light.colors;
 
     configFile = {
+      "mimeapps.list".force = true;
       "awesome".source = ./desktop_environments/awesome/awesomecfg;
       "chromium/policies/managed/extra.json".text = builtins.toJSON {
         "OsColorMode" = "dark";
