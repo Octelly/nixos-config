@@ -1413,10 +1413,10 @@ in
     ./git.nix
     ./desktop_environments/plasma
     ./shell
-    ./lutris.nix
+    #./lutris.nix
     ./nvim.nix
     ./desktop_environments/niri
-    ./bitwarden-ssh-agent.nix
+    #./bitwarden-ssh-agent.nix
     #./programs/mopidy
     #./programs/emacs
     ./programs/btop

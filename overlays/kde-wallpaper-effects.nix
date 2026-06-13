@@ -3,18 +3,18 @@
 final: prev: {
   plasma-wallpaper-effects = prev.stdenv.mkDerivation rec {
     pname = "plasma-wallpaper-effects";
-    version = "0.6.1";
+    version = "2.1.1";
 
     src = prev.fetchFromGitHub {
       owner = "luisbocanegra";
       repo = "plasma-wallpaper-effects";
       rev = "v${version}";
-      hash = "sha256-1vj6Yn/R7OeJuQYdXj2tE8r/PvUMzBdPPCBOhdP6FDE=";
+      hash = "sha256-KXTAG5D3nPrL5t2HkOGPPS1/WC4hf1E4p+l9LqSE8yo=";
     };
 
     nativeBuildInputs = with prev; [
       cmake
-      extra-cmake-modules
+      kdePackages.extra-cmake-modules
       kdePackages.wrapQtAppsHook
     ];
 

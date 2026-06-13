@@ -411,9 +411,9 @@
           settings = {
             sources = [
               { name = "async_path"; }
-              { name = "emoji"; }
+              # { name = "emoji"; } # FIXME: allowUnfree doesn't work
               { name = "nvim_lsp"; }
-              { name = "nvim_lsp_document_symbol"; }
+              # { name = "nvim_lsp_document_symbol"; } # FIXME: allowUnfree doesn't work
               { name = "nvim_lsp_signature_help"; }
               { name = "treesitter"; }
             ];

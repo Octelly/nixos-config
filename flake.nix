@@ -159,6 +159,7 @@
             "cinny-4.2.3"
             "olm-3.2.16" # this is what marks fluffy and many other matrix things as insecure
             "qtwebengine-5.15.19" # apparently needed for fontconfig (according to what elly told me -emi)
+            "electron-39.8.10"
           ];
         };
 

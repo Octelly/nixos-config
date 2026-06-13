@@ -16,16 +16,12 @@
           };
         };
       };
-      awesome = {
-        enable = true;
-        package = pkgs.awesome-git;
-      };
       hyprland = {
         enable = true;
         debug = false;
       };
     };
-	hardware.bluetooth.enable = true;
+    hardware.bluetooth.enable = true;
     system = {
       sound.enable = true;
       xorg = {
@@ -35,13 +31,13 @@
   };
 
   boot.loader.grub.extraEntries = ''
-menuentry 'Arch Linux' --class arch --class gnu-linux --class gnu --class os {
-    insmod part_gpt
-    insmod ext2
-	search --no-floppy --fs-uuid --set=root 3063-D8B4
-    linux /vmlinuz-linux-zen root=PARTUUID=d3fe8664-76c7-4bae-8503-846206587e17 rw
-    initrd /initramfs-linux-zen.img
-}
+    menuentry 'Arch Linux' --class arch --class gnu-linux --class gnu --class os {
+        insmod part_gpt
+        insmod ext2
+    	search --no-floppy --fs-uuid --set=root 3063-D8B4
+        linux /vmlinuz-linux-zen root=PARTUUID=d3fe8664-76c7-4bae-8503-846206587e17 rw
+        initrd /initramfs-linux-zen.img
+    }
   '';
 
   hardware.graphics = {

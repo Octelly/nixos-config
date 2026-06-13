@@ -38,10 +38,6 @@
         };
         utils.overlays.vkbasalt = true;
       };
-      awesome = {
-        enable = true;
-        package = pkgs.awesome-git;
-      };
     };
     system = {
       sound.enable = true;

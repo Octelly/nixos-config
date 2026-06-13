@@ -7,10 +7,6 @@
         olympus.enable = true;
         minecraft.enable = true;
       };
-      awesome = {
-        enable = true;
-        package = pkgs.awesome-git;
-      };
       hyprland.enable = false;
       # sway.enable = true;
       river.enable = true;

@@ -25,13 +25,6 @@
         };
         fangames.ringracers = true;
       };
-      awesome = {
-        enable = true;
-        package = pkgs.awesome-git;
-      };
-      sway.enable = true;
-      qtile.enable = true;
-      hyprland.enable = false;
     };
     hardware.laptop.enable = true;
     system = {
