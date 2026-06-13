@@ -14,49 +14,97 @@
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" =
-    {
-      device = "/dev/disk/by-uuid/23f48d9f-cce6-488a-ba7f-5e2e0d13dd5d";
-      fsType = "btrfs";
-      options = [
-        "compress=zstd:6"
-      ];
-    };
+  #fileSystems."/" =
+  #  {
+  #    device = "/dev/disk/by-uuid/23f48d9f-cce6-488a-ba7f-5e2e0d13dd5d";
+  #    fsType = "btrfs";
+  #    options = [
+  #      "compress=zstd:6"
+  #    ];
+  #  };
 
-  fileSystems."/boot/efi" =
+  fileSystems."/boot" =
     {
       device = "/dev/disk/by-uuid/9DB6-25F6";
       fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" ];
+      options = [
+        "fmask=0022"
+        "dmask=0022"
+      ];
     };
 
-  fileSystems."/nix" =
+  #fileSystems."/nix" =
+  #  {
+  #    device = "/dev/disk/by-uuid/2c738dc3-b5ad-4c18-8c98-d25e98431a9f";
+  #    fsType = "btrfs";
+  #    options = [
+  #      "noatime"
+  #      "compress=zstd:6"
+  #    ];
+  #  };
+
+  #fileSystems."/home" =
+  #  {
+  #    device = "/dev/disk/by-uuid/da172f79-f4f5-425b-a000-0f4486c2932f";
+  #    fsType = "btrfs";
+  #    options = [
+  #      "compress=zstd:3"
+  #    ];
+  #  };
+
+  #fileSystems."/archHome" =
+  #  {
+  #    device = "/dev/disk/by-uuid/0d196eaf-8a57-410a-a702-2fd0508e387e";
+  #    fsType = "ext4";
+  #    options = [
+  #      "commit=60"
+  #    ];
+  #  };
+
+  fileSystems."/archHome" =
     {
-      device = "/dev/disk/by-uuid/2c738dc3-b5ad-4c18-8c98-d25e98431a9f";
+      device = "/dev/disk/by-uuid/bc9e040b-9a43-4f7e-bd26-eeebd99b3951";
       fsType = "btrfs";
       options = [
-        "noatime"
-        "compress=zstd:6"
+        "compress=zstd:5"
+      ];
+    };
+  services.beesd.filesystems.archHome = {
+    spec = "UUID=bc9e040b-9a43-4f7e-bd26-eeebd99b3951";
+    hashTableSizeMB = 2048;
+    extraOptions = [ "--loadavg-target" "1.0" ];
+  };
+
+  fileSystems."/" =
+    {
+      device = "/dev/disk/by-uuid/bbaee1ae-e04c-4960-89cd-d00befb46f97";
+      fsType = "btrfs";
+      options = [
+        "subvol=root"
+        "compress=zstd:4"
       ];
     };
 
   fileSystems."/home" =
     {
-      device = "/dev/disk/by-uuid/da172f79-f4f5-425b-a000-0f4486c2932f";
+      device = "/dev/disk/by-uuid/bbaee1ae-e04c-4960-89cd-d00befb46f97";
       fsType = "btrfs";
       options = [
-        "compress=zstd:3"
+        "subvol=home"
+        "compress=zstd:4"
       ];
     };
 
-  fileSystems."/archHome" =
+  fileSystems."/nix" =
     {
-      device = "/dev/disk/by-uuid/0d196eaf-8a57-410a-a702-2fd0508e387e";
-      fsType = "ext4";
+      device = "/dev/disk/by-uuid/bbaee1ae-e04c-4960-89cd-d00befb46f97";
+      fsType = "btrfs";
       options = [
-        "commit=60"
+        "subvol=nix"
+        "compress=zstd:6"
       ];
     };
+
 
   swapDevices =
     [{ device = "/dev/disk/by-uuid/37c98e08-e2a7-4875-a126-899e6e124e4b"; }];

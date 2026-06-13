@@ -31,10 +31,16 @@
     loader = {
       efi = {
         canTouchEfiVariables = true;
+
+        # FIXME: this breaks everything
+        #        should be migrated to /boot
         efiSysMountPoint = "/boot/efi";
       };
       grub = {
         enable = true;
+
+        # look for other systems
+        useOSProber = true;
 
         timeoutStyle = "hidden";
 
@@ -52,21 +58,34 @@
 
         # FIXME: doesn't work
         # add netboot.xyz as an entry
-        extraFiles."netboot-xyz.efi" = pkgs.netbootxyz-efi;
+        extraFiles."netboot.xyz-snp.efi" =
+          let
+            version = "3.0.2";
+          in
+          (pkgs.fetchurl {
+            url = "https://github.com/netbootxyz/netboot.xyz/releases/download/${version}/netboot.xyz-snp.efi";
+            hash = "sha256-QSPncpFf1wsRTrv4iB+v7koWgqaTDEsnjxXW8+9B1UM=";
+          });
         extraEntries = ''
           menuentry "netboot.xyz" {
-            chainloader /netboot-xyz.efi
+            chainloader /netboot.xyz-snp.efi
           }
         '';
 
-        extraConfig = builtins.concatStringsSep "\n" [
-          # FIXME: this doesn't work actually, lol
-          ## auto boot last choice
-          # save selection as default
-          "GRUB_SAVEDEFAULT=true"
-          # loade the previously saved selection
-          "GRUB_DEFAULT=saved"
-        ];
+        # make memory test available
+        memtest86.enable = true;
+
+        # use the same option as last boot
+        default = "saved";
+
+        #extraConfig = builtins.concatStringsSep "\n" [
+        #  # FIXME: this doesn't work actually, lol
+        #  ## auto boot last choice
+        #  # save selection as default
+        #  "GRUB_SAVEDEFAULT=true"
+        #  # loade the previously saved selection
+        #  "GRUB_DEFAULT=saved"
+        #];
       };
     };
   };
