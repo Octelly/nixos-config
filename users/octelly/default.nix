@@ -408,6 +408,7 @@ in
       #aseprite
 
       thunderbird
+      super-productivity
       #planify
       #newsflash
       #fluent-reader # replacing Newsflash
@@ -428,6 +429,14 @@ in
 
       inputRedirectionClient-qt
     ];
+
+    shellAliases = {
+      rm = builtins.toString (pkgs.writeShellScriptBin "rrm" ''
+        #!/usr/bin/env zsh
+        echo "Are you sure? Either use `trash` of if you are sure do `\rm`"
+      '');
+    };
+
     pointerCursor = {
       package = posysCursors;
       name = "Posy_Cursor_Black";
@@ -869,6 +878,17 @@ in
       "vim.enableNeovim" = true;
       "vim.neovimPath" = (lib.getExe config.programs.neovim.package);
       "vim.hlsearch" = true;
+
+      "json.schemaDownload.trustedDomains" = {
+        "https://developer.microsoft.com/json-schemas/" = true;
+        "https://json-schema.org/" = true;
+        "https://json.schemastore.org/" = true;
+        "https://opencode.ai/config.json" = true;
+        "https://raw.githubusercontent.com/devcontainers/spec/" = true;
+        "https://raw.githubusercontent.com/microsoft/vscode/" = true;
+        "https://schemastore.azurewebsites.net/" = true;
+        "https://www.schemastore.org/" = true;
+      };
     };
   };
 
