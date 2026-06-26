@@ -84,7 +84,7 @@ in
       ++ optional cfg.nintendo.primehack dolphin-emu-primehack
       ++ optional cfg.nintendo.switch ryubing # maintained Ryujinx fork
       ++ optional cfg.sony.ps2 pcsx2 # libretro core doesn't support RetroAchievements
-      ++ optional cfg.sony.ps3 rpcs3
+      ++ optional cfg.sony.ps3 stable.rpcs3 #FIXME: temporary switch to stable
       ++ optional cfg.sony.ps4 shadps4
       ++ optionals (cfg.retroarch_cores != [ ]) [ (retroarch.withCores (_: cfg.retroarch_cores)) libretro-shaders-slang retroarch-joypad-autoconfig ]
     ;

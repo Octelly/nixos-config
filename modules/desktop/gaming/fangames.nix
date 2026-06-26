@@ -14,10 +14,6 @@ in {
     environment.systemPackages = with pkgs;
       optional cfg.srb2 srb2
       ++ optional cfg.srb2kart srb2kart
-
-      # FIXME: change back to unstable (primary branch for this flake)
-      #        once CMake 4 builds are fixed
-      #        https://github.com/NixOS/nixpkgs/issues/445447
-      ++ optional cfg.ringracers stable.ringracers;
+      ++ optional cfg.ringracers ringracers;
   };
 }
