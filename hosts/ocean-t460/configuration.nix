@@ -43,6 +43,12 @@
 
   networking.firewall.allowedTCPPorts = [ 25565 ];
 
+  networking.firewall.allowedTCPPortRanges = [
+    # FTP active mode (KIO + 3DS ftpd)
+    # ``cat /proc/sys/net/ipv4/ip_local_port_range``
+    { from = 32768; to = 60999; }
+  ];
+
   virtualisation.waydroid.enable = true;
 
   # can use Clang here, no special kernel modules (vmware) used
