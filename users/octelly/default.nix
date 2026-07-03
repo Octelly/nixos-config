@@ -904,6 +904,19 @@ in
     '';
   };
 
+  programs.vicinae = {
+    enable = true;
+    systemd = {
+      enable = true;
+      autoStart = true;
+    };
+    enableFirefoxIntegration = true;
+  };
+
+  programs.onlyoffice = {
+    enable = true;
+  };
+
   #programs.zsh = {
   #  enable = true;
   #  autosuggestion.enable = true;

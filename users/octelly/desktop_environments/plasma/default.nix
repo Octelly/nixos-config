@@ -31,7 +31,7 @@ in
       kwin."Window Minimize" = "Meta+E";
       kwin."Window Move Center" = "Meta+Home";
       "services/org.kde.dolphin.desktop"._launch = "Meta+F";
-      "services/org.kde.krunner.desktop"._launch = "Meta+R";
+      #"services/org.kde.krunner.desktop"._launch = "Meta+R"; #NOTE: trying Vicinae
       "services/org.kde.plasma.emojier.desktop"._launch = "Meta+.";
       #"services/org.kde.spectacle.desktop".RectangularRegionScreenShot = "Ctrl+Shift+Print";
     };
@@ -97,11 +97,11 @@ in
       };
     };
 
-    krunner = {
-      position = "center";
-      activateWhenTypingOnDesktop = false;
-      shortcuts.launch = "Meta+R";
-    };
+    #krunner = {
+    #  position = "center";
+    #  activateWhenTypingOnDesktop = false;
+    #  shortcuts.launch = "Meta+R";
+    #};
 
     spectacle = {
       shortcuts = {
@@ -134,6 +134,12 @@ in
         name = "Launch System Monitor";
         key = "Ctrl+Shift+Escape";
         command = "kioclient exec ${pkgs.btop}/share/applications/btop.desktop";
+      };
+    } // lib.optionalAttrs config.programs.vicinae.enable {
+      toggle-vicinae = {
+        name = "Toggle Vicinae";
+        key = "Meta+R";
+        command = "vicinae toggle";
       };
     };
 
