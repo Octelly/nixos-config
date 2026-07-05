@@ -361,6 +361,13 @@
   boot.initrd.services.resolved.enable = true;
   boot.initrd.systemd.enable = lib.mkDefault true;
   boot.initrd.systemd.fido2.enable = lib.mkDefault false;
+  # libvirt 12.1.0+ encrypts secrets via systemd-creds (TPM-bound).
+  # This is fragile across TPM state changes and unnecessary for basic VM use.
+  # Override at /var/lib/libvirt/secret.conf to disable.
+  systemd.tmpfiles.rules = [
+    "f /var/lib/libvirt/secret.conf 0644 root root - encrypt_data = 0"
+  ];
+
   documentation.info.enable = lib.mkDefault false;
   documentation.nixos.enable = lib.mkDefault false;
   environment.defaultPackages = lib.mkDefault [ ];
