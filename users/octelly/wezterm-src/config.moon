@@ -44,7 +44,6 @@ wezterm = require 'wezterm'
 
 	--window_decorations: "INTEGRATED_BUTTONS"
 	window_background_opacity: 0.9
-	kde_window_background_blur: true
 	inactive_pane_hsb: {
 		saturation: 1
 		brightness: 0.9

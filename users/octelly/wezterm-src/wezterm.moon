@@ -68,6 +68,11 @@ with config
 for k, v in pairs require 'config'
 	config[k] = v
 
+-- Background blur: new wayland protocol first, fall back to KDE
+ok = pcall -> config.wayland_window_background_blur = true
+if not ok
+	pcall -> config.kde_window_background_blur = true
+
 smart_splits.apply_to_config config, {
 	direction_keys: {"LeftArrow", "DownArrow", "UpArrow", "RightArrow"}
 	modifiers: {
