@@ -863,6 +863,7 @@ in
       "editor.fontVariations" = true;
       "editor.fontSize" = 13;
       "debug.console.fontSize" = 13;
+      "window.zoomLevel" = -1;
 
       "todohighlight.defaultStyle" = {
         "backgroundColor" = "#0000";
