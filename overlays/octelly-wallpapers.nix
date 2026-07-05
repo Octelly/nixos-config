@@ -3,10 +3,10 @@
 final: prev:
 let
   wallhaven =
-    {
-      id,
-      ext,
-      sha256,
+    { id
+    , ext
+    , sha256
+    ,
     }:
     builtins.fetchurl {
       inherit sha256;
@@ -36,7 +36,7 @@ in
     putTogether {
       name = "octelly-wallpapers";
       srcs = [
-        ./by.sau.avif
+        ./by.sau.webp
         (wallhaven {
           id = "d6wp7m";
           ext = "png";

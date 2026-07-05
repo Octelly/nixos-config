@@ -77,6 +77,21 @@
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake";
       inputs.nixpkgs.follows = "unstable";
+      inputs.home-manager.follows = "home";
+    };
+
+    vicinae = {
+      url = "github:vicinaehq/vicinae";
+      inputs = {
+        nixpkgs.follows = "unstable";
+      };
+    };
+    vicinae-extensions = {
+      url = "github:vicinaehq/extensions";
+      inputs = {
+        nixpkgs.follows = "unstable";
+        vicinae.follows = "vicinae";
+      };
     };
 
     eden-emu = {
@@ -99,6 +114,11 @@
       type = "github";
       owner = "L4ki";
       repo = "Breeze-Chameleon-Icons";
+      flake = false;
+    };
+
+    matugen-themes = {
+      url = "github:InioX/matugen-themes";
       flake = false;
     };
 

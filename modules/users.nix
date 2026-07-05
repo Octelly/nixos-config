@@ -146,10 +146,12 @@ in
     sharedModules = [
       #inputs.anyrun.homeManagerModules.default
       #inputs.hyprland.homeManagerModules.default
-      inputs.plasma-manager.homeModules.plasma-manager
-      inputs.nixvim.homeModules.nixvim
-      inputs.niri.homeModules.niri
       ../home/squeezelite.nix
+      inputs.niri.homeModules.niri
+      inputs.nixvim.homeModules.nixvim
+      inputs.plasma-manager.homeModules.plasma-manager
+      inputs.vicinae.homeManagerModules.default
+      inputs.zen-browser.homeModules.beta
     ];
     users = homeCfg;
   };

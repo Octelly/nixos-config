@@ -394,7 +394,7 @@ in
 
       rustup
 
-      inputs.zen-browser.packages."${system}".default
+      #inputs.zen-browser.packages."${system}".default
 
       # flameshot and dependencies
       #flameshot
@@ -524,6 +524,32 @@ in
 
     scriptOpts.thumbfast = {
       network = true;
+    };
+  };
+
+  programs.zen-browser = {
+    enable = true;
+
+    languagePacks = [
+      "en-GB"
+      "cs"
+    ];
+
+    policies = {
+      Preferences =
+        let
+          locked = x: {
+            Status = "locked";
+            Value = x;
+          };
+        in
+        {
+          "widget.use-xdg-desktop-portal.file-picker" = locked 1;
+          "widget.use-xdg-desktop-portal.location" = locked 1;
+          "widget.use-xdg-desktop-portal.mime-handler" = locked 1;
+          "widget.use-xdg-desktop-portal.open-uri" = locked 1;
+          "widget.use-xdg-desktop-portal.settings" = locked 1;
+        };
     };
   };
 
@@ -906,11 +932,77 @@ in
 
   programs.vicinae = {
     enable = true;
+
     systemd = {
       enable = true;
       autoStart = true;
+      environment = {
+        USE_LAYER_SHELL = 0;
+      };
     };
+
     enableFirefoxIntegration = true;
+
+    settings = {
+      launcher_window.layer_shell.enabled = false;
+
+      #theme = {
+      #  dark = {
+      #    name = "vicinae-dark";
+      #  };
+      #  light = {
+      #    name = "vicinae-light";
+      #  };
+      #};
+
+      favorites = [
+        "@Gelei/store.vicinae.bluetooth:devices"
+        "@ShyAssassin/vicinae-extension-vscode-recents-0:open-recents"
+        "@knoopx/vicinae-extension-nix-0:home-manager-options"
+        "@knoopx/vicinae-extension-nix-0:options"
+        "@knoopx/vicinae-extension-nix-0:packages"
+        "@mmstroik/vicinae-extension-kde-system-settings-0:search-kde-settings"
+        "applications:org.kde.spectacle"
+        "applications:superproductivity"
+        "scripts:spectacle.zsh"
+        "shortcuts:sct-aa4e753254b3"
+        "shortcuts:sct-cf26f447be75"
+        "shortcuts:sct-e541a88157dc"
+      ];
+      fallbacks = [
+        "@mmstroik/vicinae-extension-kde-system-settings-0:search-kde-settings"
+        "shortcuts:sct-aa4e753254b3"
+        "@knoopx/vicinae-extension-nix-0:packages"
+        "files:search"
+      ];
+      providers = {
+        "@Gelei/store.vicinae.bluetooth".preferences.connectionToggleable = true;
+        "@ShyAssassin/vicinae-extension-vscode-recents-0".entrypoints.open-recents.alias = "code";
+        clipboard.enable = false;
+        power.entrypoints = {
+          sleep.enabled = false;
+          soft-reboot.enabled = false;
+          reboot.alias = "restart";
+          suspend = {
+            alias = "sleep";
+            preferences.customProgram = "systemctl hybrid-sleep";
+          };
+        };
+        snippets.enabled = false;
+      };
+    };
+
+    extensions = with inputs.vicinae-extensions.packages.${pkgs.stdenv.hostPlatform.system}; [
+      # FIXME: enable once this is resolved:
+      # https://github.com/vicinaehq/extensions/blob/afb84fe4b5253777ff82db8e19e6cc0c9b7f811f/flake.nix#L66-L69
+      #bluetooth
+      #systemd
+      github
+      kde-system-settings
+      nix
+      protondb-search
+      vscode-recents
+    ];
   };
 
   programs.onlyoffice = {
@@ -1105,6 +1197,113 @@ in
       };
 
       "qtile".source = ./desktop_environments/qtile;
+      "kde-material-you-colors/config.conf".text =
+        let
+          hook = pkgs.writers.writePython3 "kde-material-you-colors-hook"
+            {
+              libraries = [ pkgs.python3Packages.dbus-python ];
+              flakeIgnore = [ "E501" ];
+            }
+            (
+              lib.concatStrings ([ ]
+                ++ lib.optional config.programs.vicinae.enable ''
+                import os
+                import re
+                import subprocess
+                import datetime
+                import dbus
+
+                MATUGEN = "${lib.getExe pkgs.matugen}"
+                NOTIFY_SEND = "${pkgs.libnotify}/bin/notify-send"
+
+                LOG = "/tmp/matugen-hook.log"
+
+
+                def strip_ansi(s):
+                    return re.sub(r"\x1b\[[0-9;]*[a-zA-Z]", "", s)
+
+
+                def fail(msg, exc=None, detail=""):
+                    ts = datetime.datetime.now().isoformat()
+                    with open(LOG, "a") as f:
+                        f.write(f"[{ts}] {msg}\n")
+                        if detail:
+                            for line in detail.strip().splitlines():
+                                f.write(f"  {line}\n")
+                        if exc:
+                            f.write(f"  {type(exc).__name__}: {exc}\n")
+                    subprocess.run(
+                        [NOTIFY_SEND, "-a", "vicinae", "-t", "0",
+                         "vicinae: wallpaper colour update failed",
+                         f"{msg}\nsee {LOG} for details"],
+                        check=False
+                    )
+
+
+                wallpaper = None
+
+                try:
+                    bus = dbus.SessionBus()
+                    plasma = dbus.Interface(
+                        bus.get_object("org.kde.plasmashell", "/PlasmaShell"),
+                        dbus_interface="org.kde.PlasmaShell",
+                    )
+                    cfg = plasma.wallpaper(0)
+                    image = cfg.get("Image") or cfg.get("image")
+                    if image:
+                        path = image.replace("file://", "")
+                        if os.path.isfile(path):
+                            wallpaper = path
+                except Exception as e:
+                    fail("could not detect wallpaper", e, str(e))
+
+                if wallpaper:
+                    try:
+                        result = subprocess.run(
+                            [MATUGEN, "image", wallpaper, "--source-color-index", "0"],
+                            capture_output=True, text=True, check=True,
+                            stdin=subprocess.DEVNULL
+                        )
+                    except subprocess.CalledProcessError as e:
+                        fail(
+                            f"matugen exited {e.returncode}",
+                            e,
+                            strip_ansi(e.stderr.strip())
+                        )
+                    except Exception as e:
+                        fail("matugen failed", e)
+              ''));
+        in
+        ''
+          [CUSTOM]
+          pywal = False
+          on_change_hook = "${hook}"
+          disable_konsole = True
+        '';
+
+      "matugen/config.toml".source = pkgs.writers.writeTOML "matugen-config" {
+        config = {
+          fallback_color = "#4285f4";
+          caching = true;
+          prefer = "closest-to-fallback";
+        };
+        templates = { }
+          // lib.optionalAttrs config.programs.vicinae.enable {
+          vicinae = {
+            input_path = "${./vicinae-matugen-template.toml}";
+            output_path = "~/.local/share/vicinae/themes/matugen.toml";
+            post_hook = "${lib.getExe config.programs.vicinae.package} theme set matugen";
+          };
+        }
+          // lib.optionalAttrs config.programs.btop.enable {
+          btop = {
+            input_path = "${inputs.matugen-themes}/templates/btop.theme";
+            output_path = "~/.config/btop/themes/matugen.theme";
+            post_hook = "pkill -USR2 btop || true";
+          };
+        }
+        ;
+      };
     };
   };
 
