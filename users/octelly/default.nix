@@ -1654,6 +1654,7 @@ in
     #./programs/emacs
     ./programs/btop
     ./programs/konsole
+    ./programs/opencode
     ./addons/tinymist
   ];
 }
