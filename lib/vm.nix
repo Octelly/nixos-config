@@ -1,34 +1,67 @@
 { pkgs, lib, nixosConfigurations, hostNames, modulesPath }:
 
+# this file is based on the upstream Nixpkgs qemu-vm.nix module
+# there are quite a few changes that may seem counter-intuitive
+# most of these stem from using virtiofs instead of 9p for sharing the host's Nix store with the VM
+# 9p/virtiofs migration-related options are marked with [9p->virtiofs] in comments
+
 let
   virtiofsdBin = "${pkgs.virtiofsd}/bin/virtiofsd";
 
   vmDefaults = {
+    # the VM disk uses ext4, not btrfs — these services would error out or
+    # waste resources on an ephemeral filesystem
     services.btrfs.autoScrub.enable = lib.mkForce false;
     services.beesd.filesystems = lib.mkForce { };
 
+    # [9p->virtiofs]
+    # virtiofs must be available in initrd to mount /nix/.ro-store
+    # before the overlay can be assembled
     boot.initrd.kernelModules = [ "virtiofs" ];
+
+    # [9p->virtiofs]
+    # virtiofsd opens one file handle per inode it serves
+    # the host-side RLIMIT_NOFILE is already raised by the wrapper;
+    # this raises the guest's kernel limit to match
     boot.kernel.sysctl."fs.file-max" = lib.mkDefault 2097152;
 
+    # the serial console (ttyS0) works alongside the graphical display,
+    # matching the wrapper's default --serial=mon:stdio
     virtualisation.qemu.consoles = lib.mkForce [ "tty0" "ttyS0,115200n8" ];
 
     virtualisation = {
+      # [9p->virtiofs]
+      # this option uses 9p to mount the host's nix store —
+      # replaced with our implementation
       mountHostNixStore = false;
+
+      # /nix/store needs to be writable so the VM can install packages
+      # inside its overlay on top of the read-only virtiofs share
+      # -> see fileSystems
       writableStore = true;
+
       graphics = lib.mkDefault true;
       diskSize = lib.mkDefault 4096;
     };
 
+    # [9p->virtiofs]
+    # two-layered Nix store:
+    #   1. /nix/.ro-store — virtiofs mount sharing the host's /nix/store
+    #   2. /nix/store     — overlayfs on top of .ro-store with a writable
+    #                       upper dir on the VM's ephemeral disk
+    #
+    # this avoids copying the full Nix store into the VM while still
+    # allowing the guest to write
     virtualisation.fileSystems = {
       "/nix/.ro-store" = {
         device = "nix-store";
         fsType = "virtiofs";
         neededForBoot = true;
         options = [
-          "suid"
-          "noatime"
-          "x-initrd.mount"
-          "x-systemd.requires=modprobe@virtiofs.service"
+          "suid" # needed for setuid wrappers in the store
+          "noatime" # nix store is immutable — noatime is free
+          "x-initrd.mount" # mounted in initrd before rootfs switch
+          "x-systemd.requires=modprobe@virtiofs.service" # module must load before the mount
         ];
       };
       "/nix/store" = {
@@ -42,21 +75,24 @@ let
     };
   };
 
-  buildVm = name: let
-    host = nixosConfigurations.${name};
-  in host.extendModules {
-    modules = [
-      (modulesPath + "/virtualisation/qemu-vm.nix")
-      host.config.nixos.vm.extraConfig
-      vmDefaults
-      { networking.hostName = lib.mkForce "${name}-vm"; }
-    ];
-  };
+  buildVm = name:
+    let
+      host = nixosConfigurations.${name};
+    in
+    host.extendModules {
+      modules = [
+        (modulesPath + "/virtualisation/qemu-vm.nix")
+        host.config.nixos.vm.extraConfig
+        vmDefaults
+        { networking.hostName = lib.mkForce "${name}-vm"; }
+      ];
+    };
 
-  mkRunner = name: vmScript: pkgs.writers.writePython3 "${name}-vm" {
-    libraries = [ pkgs.python3Packages.click pkgs.python3Packages.systemd-python ];
-    flakeIgnore = [ "E501" ];
-  } ''
+  mkRunner = name: vmScript: pkgs.writers.writePython3 "${name}-vm"
+    {
+      libraries = [ pkgs.python3Packages.click pkgs.python3Packages.systemd-python ];
+      flakeIgnore = [ "E501" ];
+    } ''
     import os
     import sys
     import time
@@ -146,14 +182,14 @@ let
                 "-p", "RestrictRealtime=yes",
                 "-p", "SystemCallFilter=@system-service open_by_handle_at",
                 "-p", "RestrictAddressFamilies=AF_UNIX",
-                "-p", "PrivateUsers=no",
+                "-p", "PrivateUsers=no", # no user namespace — breaks UID mapping for virtiofsd
                 "--",
                 VIRTIOFSD,
                 f"--socket-path={virtiofs_sock}",
                 "--shared-dir=/nix/store",
-                "--cache=always",
+                "--cache=always",      # safe: nix store is immutable
                 "--writeback",
-                "--sandbox=none",
+                "--sandbox=none",       # systemd-run handles sandboxing
                 "--seccomp=none",
                 "--inode-file-handles=prefer",
                 "--thread-pool-size=0",
@@ -179,25 +215,20 @@ let
             if systemd:
                 log("virtiofsd running via systemd-run")
             else:
-                log_cmd([VIRTIOFSD,
-                         f"--socket-path={virtiofs_sock}",
-                         "--shared-dir=/nix/store",
-                         "--cache=always",
-                         "--writeback",
-                         "--sandbox=none",
-                         "--seccomp=none",
-                         "--inode-file-handles=prefer",
-                         "--thread-pool-size=0"])
+                virtiofsd_args = [
+                    VIRTIOFSD,
+                    f"--socket-path={virtiofs_sock}",
+                    "--shared-dir=/nix/store",
+                    "--cache=always",      # safe: nix store is immutable
+                    "--writeback",
+                    "--sandbox=none",       # systemd unavailable — no sandbox
+                    "--seccomp=none",
+                    "--inode-file-handles=prefer",
+                    "--thread-pool-size=0",
+                ]
+                log_cmd(virtiofsd_args)
                 virtiofsd = subprocess.Popen(
-                    [VIRTIOFSD,
-                     f"--socket-path={virtiofs_sock}",
-                     "--shared-dir=/nix/store",
-                     "--cache=always",
-                     "--writeback",
-                     "--sandbox=none",
-                     "--seccomp=none",
-                     "--inode-file-handles=prefer",
-                     "--thread-pool-size=0"],
+                    virtiofsd_args,
                     stdout=subprocess.DEVNULL,
                     stderr=errlog,
                 )
@@ -354,6 +385,8 @@ let
             qemu_opts += " -display gtk"
         elif display == "sdl":
             qemu_opts += " -display sdl,gl=on"
+        elif display == "none":
+            qemu_opts += " -display none"
 
         if not no_virgl:
             qemu_opts += " -device virtio-vga-gl"
@@ -384,22 +417,28 @@ let
         cli()
   '';
 
-  packages = builtins.listToAttrs (map (name: {
-    name = "${name}-vm";
-    value = (buildVm name).config.system.build.vm;
-  }) hostNames);
-
-  apps = builtins.listToAttrs (map (name:
-    let
-      vmPkg = packages."${name}-vm";
-      vmHostName = "${name}-vm";
-      vmScript = "${vmPkg}/bin/run-${vmHostName}-vm";
-    in {
+  packages = builtins.listToAttrs (map
+    (name: {
       name = "${name}-vm";
-      value = {
-        type = "app";
-        program = toString (mkRunner name vmScript);
-      };
-    }
-  ) hostNames);
-in { inherit packages apps; }
+      value = (buildVm name).config.system.build.vm;
+    })
+    hostNames);
+
+  apps = builtins.listToAttrs (map
+    (name:
+      let
+        vmPkg = packages."${name}-vm";
+        vmHostName = "${name}-vm";
+        vmScript = "${vmPkg}/bin/run-${vmHostName}-vm";
+      in
+      {
+        name = "${name}-vm";
+        value = {
+          type = "app";
+          program = toString (mkRunner name vmScript);
+        };
+      }
+    )
+    hostNames);
+in
+{ inherit packages apps; }
