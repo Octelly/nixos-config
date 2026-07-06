@@ -1,4 +1,5 @@
-{ config, pkgs, ... }: {
+{ ... }: {
+
   modules = {
     desktop = {
       gaming = {
@@ -11,7 +12,10 @@
       # sway.enable = true;
       river.enable = true;
     };
-    hardware.laptop.enable = true;
+    hardware = {
+      laptop.enable = true;
+      roleFlags.personalComputer = true;
+    };
     system = {
       sound.enable = true;
       xorg = {

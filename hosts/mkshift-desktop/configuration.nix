@@ -1,4 +1,5 @@
 { pkgs, ... }: {
+
   modules = {
     desktop = {
       gaming = {
@@ -21,7 +22,10 @@
         debug = false;
       };
     };
-    hardware.bluetooth.enable = true;
+    hardware = {
+      bluetooth.enable = true;
+      roleFlags.personalComputer = true;
+    };
     system = {
       sound.enable = true;
       xorg = {

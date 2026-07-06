@@ -247,7 +247,17 @@
       owner = "root";
       group = "root";
       # https://github.com/joshuar/go-hass-agent/blob/3bb5cf993bb88522a88b3892e556ab0f4f5a342f/assets/postinstall.sh
+      # FATAL: these caps are essentially full root (cap_sys_admin+cap_dac_override).
+      # Any user on the system can run this binary with total privilege escalation.
+      # Need to restrict permissions or drop unnecessary caps. TODO.
       capabilities = "cap_setgid,cap_setuid,cap_sys_rawio,cap_sys_admin,cap_mknod,cap_dac_override=+ep";
+    };
+
+    virtiofsd = lib.mkIf config.modules.hardware.roleFlags.personalComputer {
+      source = "${pkgs.virtiofsd}/bin/virtiofsd";
+      owner = "root";
+      group = "root";
+      capabilities = "cap_dac_read_search,cap_sys_chroot=+ep";
     };
   };
 

@@ -1,5 +1,6 @@
 { lib, pkgs, ... }: {
 
+
   nix.buildMachines = [{
     hostName = "192.168.1.238";
     system = "x86_64-linux";
@@ -26,7 +27,10 @@
         fangames.ringracers = true;
       };
     };
-    hardware.laptop.enable = true;
+    hardware = {
+      laptop.enable = true;
+      roleFlags.personalComputer = true;
+    };
     system = {
       sound.enable = true;
       xorg = {

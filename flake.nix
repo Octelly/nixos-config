@@ -202,9 +202,29 @@
         }
       );
 
+      nixosConfigurations = mapHosts ./hosts;
+
+      system = "x86_64-linux";
+
+      # NOTE: bare pkgs — no overlays (repoConf.overlays not imported here).
+      # None of repoConf's overlays touch python3Packages or virtiofsd,
+      # so the VM builder is unaffected. If that ever changes, import
+      # `nixpkgs { inherit system; overlays = repoConf.overlays; }` instead.
+      pkgs = import nixpkgs { inherit system; };
+
+      hostNames = builtins.attrNames (
+        builtins.removeAttrs (builtins.readDir ./hosts) [ "shared" ]
+      );
+
+      modulesPath = "${nixpkgs}/nixos/modules";
+
+      vm = import ./lib/vm.nix {
+        inherit pkgs lib nixosConfigurations hostNames modulesPath;
+      };
     in
     {
-      # nixosModules = mapModulesRec ./modules;
-      nixosConfigurations = mapHosts ./hosts;
+      inherit nixosConfigurations;
+      packages.${system} = vm.packages;
+      apps.${system} = vm.apps;
     };
 }

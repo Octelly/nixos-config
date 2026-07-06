@@ -3,7 +3,6 @@
 , ...
 }:
 {
-
   modules = {
     desktop = {
       gaming = {
@@ -45,7 +44,10 @@
         enable = true;
       };
     };
-    hardware.bluetooth.enable = true;
+    hardware = {
+      bluetooth.enable = true;
+      roleFlags.personalComputer = true;
+    };
   };
 
   nix.settings = {
