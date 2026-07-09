@@ -956,6 +956,8 @@ in
       #  };
       #};
 
+      applications.entrypoints.feishin.alias = "music navidrome";
+
       favorites = [
         "@Gelei/store.vicinae.bluetooth:devices"
         "@ShyAssassin/vicinae-extension-vscode-recents-0:open-recents"
@@ -1648,7 +1650,7 @@ in
     ./shell
     #./lutris.nix
     ./nvim.nix
-    ./desktop_environments/niri
+    #./desktop_environments/niri
     #./bitwarden-ssh-agent.nix
     #./programs/mopidy
     #./programs/emacs
