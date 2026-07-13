@@ -507,10 +507,15 @@ in
 
   programs.mpv = {
     enable = true;
+    defaultProfiles = [ "gpu-hq" ];
+
     config = {
       # replaced by uosc
       osd-bar = false;
       border = false;
+
+      vo = "gpu-next";
+      target-colorspace-hint = "yes";
     };
 
     scripts = with pkgs.mpvScripts; [
@@ -982,6 +987,7 @@ in
         "@Gelei/store.vicinae.bluetooth".preferences.connectionToggleable = true;
         "@ShyAssassin/vicinae-extension-vscode-recents-0".entrypoints.open-recents.alias = "code";
         clipboard.enable = false;
+        "@leiserfg/vicinae-extension-ssh-0".preferences.terminal = "wezterm ssh";
         power.entrypoints = {
           sleep.enabled = false;
           soft-reboot.enabled = false;
@@ -1004,6 +1010,7 @@ in
       kde-system-settings
       nix
       protondb-search
+      ssh
       vscode-recents
     ];
   };
