@@ -45,6 +45,11 @@
 
   services.tailscale.enable = true;
 
+  services.ollama = {
+    enable = true;
+    package = pkgs.ollama-cpu;
+  };
+
   networking.firewall.allowedTCPPorts = [ 25565 ];
 
   networking.firewall.allowedTCPPortRanges = [

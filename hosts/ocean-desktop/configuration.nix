@@ -183,6 +183,12 @@
 
   services.tailscale.enable = true;
 
+  services.ollama = {
+    enable = true;
+    package = pkgs.ollama-rocm;
+    rocmOverrideGfx = "10.3.0";
+  };
+
   # useful for kernel compilation
   fileSystems."/tmp" = {
     device = "none";
@@ -304,5 +310,5 @@
     '';
   };
 
-  programs.eden.enable = true;
+  #programs.eden.enable = true;
 }

@@ -5,12 +5,20 @@
 
   programs.mcp.servers = {
     nixos = {
-      command = "${pkgs.mcp-nixos}/bin/mcp-nixos";
+      command = "${lib.getExe pkgs.mcp-nixos}";
       enabled = true;
     };
     context7 = {
       url = "https://mcp.context7.com/mcp";
       headers.CONTEXT7_API_KEY = "{env:CONTEXT7_API_KEY}";
+      enabled = true;
+    };
+    playwright = {
+      command = "${lib.getExe pkgs.playwright-mcp}";
+      enabled = true;
+    };
+    open-websearch = {
+      command = "${lib.getExe pkgs.open-websearch}";
       enabled = true;
     };
   };
@@ -23,6 +31,7 @@
       permission = {
         "*" = "ask";
         bash = {
+          # WARN: ORDER MATTERS! The first matching rule will be applied.
           "free *" = "allow";
           "git blame *" = "allow";
           "git diff *" = "allow";
@@ -80,6 +89,15 @@
           "systemd-run *" = "deny";
           "umount *" = "deny";
           "uname *" = "allow";
+          "head *" = "allow";
+          "tail *" = "allow";
+          "baloosearch6 *" = "allow";
+          "balooshow6 *" = "allow";
+          "balooctl6 status" = "allow";
+          "kreadconfig6 *" = "allow";
+          "loginctl show-session *" = "allow";
+          "busctl tree *" = "allow";
+          "busctl introspect *" = "allow";
         };
         codesearch = "allow";
         external_directory."/etc/nixos/*" = "allow";
@@ -95,8 +113,23 @@
         task = "allow";
         webfetch = "allow";
         websearch = "allow";
+        tools =
+          let
+            mcp = config.programs.mcp.servers;
+          in
+          { }
+          // lib.optionalAttrs (builtins.hasAttr "nixos" mcp) {
+            "nixos_nix" = "allow";
+            "nixos_nix_versions" = "allow";
+          }
+          // lib.optionalAttrs (builtins.hasAttr "context7" mcp) {
+            "context7_resolve-library-id" = "allow";
+            "context7_query-docs" = "allow";
+          };
+
       };
-      plugin = [ "opencode-notify" ];
+      #plugin = [ "opencode-notify" ];
+      };
     };
     context = ''
       You are running on NixOS. System configuration is at /etc/nixos.
@@ -109,6 +142,8 @@
       1. Query packages/options via mcp-nixos MCP server.
       2. Check stuff online as much as possible.
       3. If you need a package that isn't installed, use the MCP server to identify it and ask the user before using `nix shell` or `nix run`.
+
+      Don't answer from memory when a tool can establish the fact.
     '';
   };
 
