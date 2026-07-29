@@ -182,7 +182,7 @@ let
                 "-p", "RestrictRealtime=yes",
                 "-p", "SystemCallFilter=@system-service open_by_handle_at",
                 "-p", "RestrictAddressFamilies=AF_UNIX",
-                "-p", "PrivateUsers=no", # no user namespace — breaks UID mapping for virtiofsd
+                "-p", "PrivateUsers=no",  # no user namespace — breaks UID mapping for virtiofsd
                 "--",
                 VIRTIOFSD,
                 f"--socket-path={virtiofs_sock}",

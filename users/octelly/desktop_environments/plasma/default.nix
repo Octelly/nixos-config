@@ -327,4 +327,8 @@ in
       plasmanotifyrc.Notifications.PopupPosition = "TopCenter";
     };
   };
+
+  imports = [
+    ./wezterm-titlebar
+  ];
 }
