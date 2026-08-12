@@ -143,15 +143,16 @@ in
       inherit inputs system;
       nixConfig = config;
     };
-    sharedModules = [
-      #inputs.anyrun.homeManagerModules.default
-      #inputs.hyprland.homeManagerModules.default
+    sharedModules = with inputs; [
+      #anyrun.homeManagerModules.default
+      #hyprland.homeManagerModules.default
       ../home/squeezelite.nix
-      inputs.niri.homeModules.niri
-      inputs.nixvim.homeModules.nixvim
-      inputs.plasma-manager.homeModules.plasma-manager
-      inputs.vicinae.homeManagerModules.default
-      inputs.zen-browser.homeModules.beta
+      #kineticwe.homeModules.default
+      niri.homeModules.niri
+      nixvim.homeModules.nixvim
+      plasma-manager.homeModules.plasma-manager
+      vicinae.homeManagerModules.default
+      zen-browser.homeModules.beta
     ];
     users = homeCfg;
   };

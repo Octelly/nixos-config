@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }: {
+{ config, pkgs, lib, inputs, ... }: {
 
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" ];
@@ -265,6 +265,8 @@
 
   services = {
 
+    ananicy.package = lib.mkDefault pkgs.ananicy-cpp;
+
     displayManager.plasma-login-manager = {
       enable = true;
     };
@@ -384,6 +386,10 @@
   services.userborn.enable = lib.mkDefault true;
   #system.etc.overlay.enable = lib.mkDefault true; # WARN: EXPERIMENTAL
   system.tools.nixos-generate-config.enable = lib.mkDefault false;
+
+  imports = with inputs; [
+    #kineticwe.nixosModules.default
+  ];
 }
 
 

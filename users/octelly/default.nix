@@ -790,6 +790,7 @@ in
 
   programs.vscode = {
     enable = true;
+
     extensions =
       (with pkgs.open-vsx; [
         # make thing usable
@@ -801,16 +802,27 @@ in
 
         # language support
         #bungcip.better-toml
-        tamasfe.even-better-toml
         #ms-pyright.pyright # pylance is installed?
-        ms-python.python
-        ms-python.isort
-        svelte.svelte-vscode
-        jnoortheen.nix-ide
-        rust-lang.rust-analyzer
         #ms-vscode.makefile-tools
-        wayou.vscode-todo-highlight
+        jnoortheen.nix-ide
+        ms-python.isort
+        ms-python.python
+        rust-lang.rust-analyzer
         spgoding.datapack-language-server
+        svelte.svelte-vscode
+        tamasfe.even-better-toml
+        wayou.vscode-todo-highlight
+
+        # java
+        redhat.java
+        vscjava.vscode-gradle
+        vscjava.vscode-java-debug #FIXME: doesn't work because cannot create a directory in its immutable source
+        vscjava.vscode-java-dependency
+        vscjava.vscode-java-pack
+        vscjava.vscode-java-test
+
+        # slop
+        ltmoerdani.opencode-copilot-chat
       ])
       ++ (with pkgs.vscode-marketplace; [
         # language support
@@ -839,14 +851,15 @@ in
         ms-vscode-remote.remote-ssh
         ms-vscode-remote.remote-ssh-edit
       ]);
-    userSettings = {
+    userSettings = rec {
       # Vim controls
       #"extensions.experimental.affinity" = {
       #  "asvetliakov.vscode-neovim" = 1;
       #};
 
       "nix.enableLanguageServer" = true;
-      "nix.serverSettings".nil.formatting.command = [ "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt" ];
+      "nix.formatterPath" = (lib.getExe pkgs.nixpkgs-fmt);
+      "nix.serverSettings".nil.formatting.command = [ (lib.getExe pkgs.nixpkgs-fmt) ];
       "nix.serverPath" = "${pkgs.nil}/bin/nil";
 
       # theming
@@ -921,6 +934,30 @@ in
         "https://schemastore.azurewebsites.net/" = true;
         "https://www.schemastore.org/" = true;
       };
+
+      # Svelte
+      "svelte.enable-ts-plugin" = true;
+
+      # Java
+      "java.jdt.ls.java.home" = "${pkgs.openjdk25}/lib/openjdk";
+      "java.configuration.runtimes" = [
+        {
+          name = "JavaSE-1.8";
+          path = "${pkgs.openjdk8}/lib/openjdk";
+        }
+        {
+          name = "JavaSE-17";
+          path = "${pkgs.openjdk17}/lib/openjdk";
+        }
+        {
+          name = "JavaSE-21";
+          path = "${pkgs.openjdk21}/lib/openjdk";
+        }
+        {
+          name = "JavaSE-25";
+          path = "${pkgs.openjdk25}/lib/openjdk";
+        }
+      ];
     };
   };
 
@@ -938,6 +975,7 @@ in
 
   programs.vicinae = {
     enable = true;
+    package = inputs.vicinae.packages.${pkgs.stdenv.hostPlatform.system}.default;
 
     systemd = {
       enable = true;

@@ -37,6 +37,18 @@ in
     };
 
 
+    window-rules = [ ]
+      ++ lib.optional config.programs.zen-browser.enable {
+      description = "Zen browser Picture-in-Picture on top";
+      match = {
+        window-class = { value = "zen-beta"; type = "exact"; };
+        title = { value = "Picture-in-Picture"; type = "exact"; };
+      };
+      apply = {
+        layer = { value = "ost"; apply = "force"; };
+      };
+    };
+
 
     fonts = rec {
       general = {

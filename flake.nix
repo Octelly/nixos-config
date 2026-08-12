@@ -19,10 +19,10 @@
       inputs.nixpkgs.follows = "unstable";
       inputs.nixpkgs-stable.follows = "stable";
     };
-    gauntlet = {
-      url = "github:project-gauntlet/gauntlet";
-      inputs.nixpkgs.follows = "unstable";
-    };
+    #gauntlet = {
+    #  url = "github:project-gauntlet/gauntlet";
+    #  inputs.nixpkgs.follows = "unstable";
+    #};
     #wezterm = {
     #  url = "github:wezterm/wezterm?dir=nix";
     #  inputs.nixpkgs.follows = "unstable";
@@ -59,6 +59,10 @@
       inputs.nixpkgs-stable.follows = "stable";
     };
 
+    #kineticwe = {
+    #  url = "gitlab:theblackdon/kineticwe";
+    #  inputs.nixpkgs.follows = "nixpkgs";
+    #};
     ## Hyprland stuff
     #hyprland.url = "github:hyprwm/Hyprland";
     #hyprland-plugins = {
@@ -161,6 +165,7 @@
     , niri
     , emacs-overlay
     , nix-cachyos-kernel
+      #, kineticwe
     , ...
     }@inputs:
     let
@@ -184,12 +189,13 @@
         };
 
         overlays = importNixFiles ./overlays ++ [
-          nur.overlays.default
-          f2k.overlays.default
-          vscode-ext.overlays.default
-          niri.overlays.niri
           emacs-overlay.overlay
+          f2k.overlays.default
+          #kineticwe.overlays.default
+          niri.overlays.niri
           nix-cachyos-kernel.overlays.pinned
+          nur.overlays.default
+          vscode-ext.overlays.default
         ];
       };
 
