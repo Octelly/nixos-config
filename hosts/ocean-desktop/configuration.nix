@@ -100,6 +100,8 @@
     ydotool
 
     looking-glass-client # good VM video
+
+    ntfs3g
   ];
 
   #boot.kernelPackages = lib.mkForce pkgs.unstable-znver3.linuxPackages_zen;
@@ -118,6 +120,7 @@
     enable = true;
     rulesProvider = pkgs.ananicy-rules-cachyos;
   };
+
   # NOTE: should not be mixed with ananicy
   modules.desktop.gaming.utils.gamemode = lib.mkForce false;
 
@@ -164,22 +167,25 @@
     "options vfio-pci ids=1002:67ef,1002:aae0"
   ];
 
-  # required for NixOS SteamVR to work
-  # https://wiki.nixos.org/wiki/VR/en#SteamVR
-  # WARN: requires compiling the kernel
-  # NOTE: opportunity taken to compile with znver3 optimizations (see above)
   #boot.kernelPatches = [
-  #  {
-  #    name = "amdgpu-ignore-ctx-privileges";
-  #    patch = pkgs.fetchpatch {
-  #      name = "cap_sys_nice_begone.patch";
-  #      url = "https://github.com/Frogging-Family/community-patches/raw/master/linux61-tkg/cap_sys_nice_begone.mypatch";
-  #      hash = "sha256-Y3a0+x2xvHsfLax/uwycdJf3xLxvVfkfDVqjkxNaYEo=";
-  #    };
-  #  }
   #];
 
+  boot.kernelPatches = [
+    # required for NixOS SteamVR to work
+    # https://wiki.nixos.org/wiki/VR/en#SteamVR
+    # WARN: requires compiling the kernel
+    #  {
+    #    name = "amdgpu-ignore-ctx-privileges";
+    #    patch = pkgs.fetchpatch {
+    #      name = "cap_sys_nice_begone.patch";
+    #      url = "https://github.com/Frogging-Family/community-patches/raw/master/linux61-tkg/cap_sys_nice_begone.mypatch";
+    #      hash = "sha256-Y3a0+x2xvHsfLax/uwycdJf3xLxvVfkfDVqjkxNaYEo=";
+    #    };
+    #  }
+  ];
+
   services.flatpak.enable = true;
+  fonts.fontDir.enable = true;
 
   services.tailscale.enable = true;
 
@@ -210,6 +216,7 @@
   networking.firewall.allowedTCPPorts = [
     25565 # minecra
     42420 # vintage story
+    6500 # MK Retro Rewind
 
     # NOTE: stale, not used in a long while, to be tested and re-enabled if needed
     #3216 # EA App
@@ -217,6 +224,7 @@
   networking.firewall.allowedUDPPorts = [
     25565 # minecra
     42420 # vintage story
+    6500 # MK Retro Rewind
 
     # NOTE: stale, not used in a long while, to be tested and re-enabled if needed
     #3216 # EA App
@@ -225,7 +233,17 @@
   networking.firewall.allowedTCPPortRanges = [
     # FTP active mode (KIO + 3DS ftpd)
     # ``cat /proc/sys/net/ipv4/ip_local_port_range``
-    { from = 32768; to = 60999; }
+    {
+      from = 32768;
+      to = 60999;
+    }
+  ];
+
+  networking.firewall.allowedUDPPortRanges = [
+    {
+      from = 22000;
+      to = 22999;
+    } # Dolphin emulator Wii online
   ];
 
   # WARN: experimental gaming settings
@@ -283,6 +301,7 @@
     extraRules = ''
       SUBSYSTEM=="usbmon", GROUP="wireshark", MODE="0640"
       SUBSYSTEMS=="usb", ATTRS{idVendor}=="320f", ATTRS{idProduct}=="5055", MODE="0660"
+      ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="33fa", ATTR{idProduct}=="0012", TEST=="power/control", ATTR{power/control}="on"
 
       # https://github.com/HamzaYslmn/Forza-Horizon-DualSense-Python/blob/3e3c3c966a1ae0fd40f714216151e47e5ca6456e/packaging/linux/70-dualsense.rules
       # udev rules for Sony DualSense (PS5) controllers.

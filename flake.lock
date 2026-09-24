@@ -592,6 +592,30 @@
         "type": "github"
       }
     },
+    "moonfin-flake": {
+      "inputs": {
+        "home-manager": [
+          "home"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "systems": "systems_3"
+      },
+      "locked": {
+        "lastModified": 1790219196,
+        "narHash": "sha256-FWdxFoDAix+eqmc0LnHRER/UxnAqGXHv5OyM7wl6+WQ=",
+        "owner": "siew24",
+        "repo": "moonfin-flake",
+        "rev": "4600242f0a0a55fb8759fe4264d9e2c2f3b03035",
+        "type": "github"
+      },
+      "original": {
+        "owner": "siew24",
+        "repo": "moonfin-flake",
+        "type": "github"
+      }
+    },
     "mprisqueeze": {
       "inputs": {
         "naersk": "naersk",
@@ -892,7 +916,7 @@
           "unstable"
         ],
         "nvfetcher": "nvfetcher",
-        "systems": "systems_3",
+        "systems": "systems_4",
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
@@ -986,6 +1010,22 @@
     },
     "nixpkgs_7": {
       "locked": {
+        "lastModified": 1790238896,
+        "narHash": "sha256-ym4BG18Pu2awiJIehla1Lo9xiB2QYRcCzW3SB74gEBY=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "34ca302a9572963c02e385c056be37c85ff51b77",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_8": {
+      "locked": {
         "lastModified": 1778869304,
         "narHash": "sha256-30sZNZoA1cqF5JNO9fVX+wgiQYjB7HJqqJ4ztCDeBZE=",
         "owner": "NixOS",
@@ -1000,7 +1040,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_8": {
+    "nixpkgs_9": {
       "locked": {
         "lastModified": 1784564315,
         "narHash": "sha256-7OpsHHIZFUBLbeHNQ0oC40DZRQjsmGWodXge+OqgPgk=",
@@ -1019,10 +1059,8 @@
     "nixvim": {
       "inputs": {
         "flake-parts": "flake-parts_3",
-        "nixpkgs": [
-          "unstable"
-        ],
-        "systems": "systems_4"
+        "nixpkgs": "nixpkgs_7",
+        "systems": "systems_5"
       },
       "locked": {
         "lastModified": 1787270640,
@@ -1144,6 +1182,7 @@
         "kwin-effects-forceblur": "kwin-effects-forceblur",
         "lsfg-vk-flake": "lsfg-vk-flake",
         "matugen-themes": "matugen-themes",
+        "moonfin-flake": "moonfin-flake",
         "mprisqueeze": "mprisqueeze",
         "niri": "niri",
         "nix-cachyos-kernel": "nix-cachyos-kernel",
@@ -1221,7 +1260,7 @@
     },
     "soulver-cpp": {
       "inputs": {
-        "nixpkgs": "nixpkgs_7",
+        "nixpkgs": "nixpkgs_8",
         "nixpkgs-libxml2": "nixpkgs-libxml2"
       },
       "locked": {
@@ -1286,6 +1325,21 @@
     },
     "systems_3": {
       "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "systems_4": {
+      "locked": {
         "lastModified": 1689347949,
         "narHash": "sha256-12tWmuL2zgBgZkdoB6qXZsgJEH9LR3oUgpaQq2RbI80=",
         "owner": "nix-systems",
@@ -1299,7 +1353,7 @@
         "type": "github"
       }
     },
-    "systems_4": {
+    "systems_5": {
       "flake": false,
       "locked": {
         "lastModified": 1774449309,
@@ -1316,7 +1370,7 @@
         "type": "github"
       }
     },
-    "systems_5": {
+    "systems_6": {
       "locked": {
         "lastModified": 1681028828,
         "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
@@ -1331,7 +1385,7 @@
         "type": "github"
       }
     },
-    "systems_6": {
+    "systems_7": {
       "locked": {
         "lastModified": 1681028828,
         "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
@@ -1423,7 +1477,7 @@
           "unstable"
         ],
         "soulver-cpp": "soulver-cpp",
-        "systems": "systems_5"
+        "systems": "systems_6"
       },
       "locked": {
         "lastModified": 1787232541,
@@ -1445,7 +1499,7 @@
         "nixpkgs": [
           "unstable"
         ],
-        "systems": "systems_6",
+        "systems": "systems_7",
         "vicinae": [
           "vicinae"
         ]
@@ -1466,7 +1520,7 @@
     },
     "vscode-ext": {
       "inputs": {
-        "nixpkgs": "nixpkgs_8"
+        "nixpkgs": "nixpkgs_9"
       },
       "locked": {
         "lastModified": 1787276820,

@@ -146,8 +146,9 @@ in
     sharedModules = with inputs; [
       #anyrun.homeManagerModules.default
       #hyprland.homeManagerModules.default
-      ../home/squeezelite.nix
       #kineticwe.homeModules.default
+      ../home/squeezelite.nix
+      moonfin-flake.homeModules.latest
       niri.homeModules.niri
       nixvim.homeModules.nixvim
       plasma-manager.homeModules.plasma-manager

@@ -33,7 +33,7 @@
     #};
     nixvim = {
       url = "github:nix-community/nixvim";
-      inputs.nixpkgs.follows = "unstable";
+      #inputs.nixpkgs.follows = "unstable";
     };
     nixHW.url = "github:nixos/nixos-hardware/master";
     f2k = {
@@ -83,6 +83,15 @@
       inputs.nixpkgs.follows = "unstable";
       inputs.home-manager.follows = "home";
     };
+
+    moonfin-flake = {
+      url = "github:siew24/moonfin-flake";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        home-manager.follows = "home";
+      };
+    };
+
 
     vicinae = {
       url = "github:vicinaehq/vicinae";

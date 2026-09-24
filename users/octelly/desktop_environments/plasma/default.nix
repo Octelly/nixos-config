@@ -37,17 +37,18 @@ in
     };
 
 
-    window-rules = [ ]
-      ++ lib.optional config.programs.zen-browser.enable {
-      description = "Zen browser Picture-in-Picture on top";
-      match = {
-        window-class = { value = "zen-beta"; type = "exact"; };
-        title = { value = "Picture-in-Picture"; type = "exact"; };
-      };
-      apply = {
-        layer = { value = "ost"; apply = "force"; };
-      };
-    };
+    window-rules = [
+      {
+        description = "Firefox (+forks) Picture-in-Picture on top";
+        match = {
+          #window-class = { value = "zen-beta"; type = "exact"; };
+          title = { value = "Picture-in-Picture"; type = "exact"; };
+        };
+        apply = {
+          layer = { value = "ost"; apply = "force"; };
+        };
+      }
+    ];
 
 
     fonts = rec {
@@ -299,23 +300,23 @@ in
         Plugins = {
           blurEnabled = true;
           forceblurEnabled = true;
-          krohnkiteEnabled = true;
+          krohnkiteEnabled = false;
         };
 
-        Script-khronkite = {
-          enableColumnsLayout = false;
-          enableMonocleLayout = false;
-          enableSpiralLayout = false;
-          enableSpreadLayout = false;
-          enableStairLayout = false;
-          enableThreeColumnLayout = false;
-          floatingClass = "mpv,org.kde.gwenview,re.sonny.Junction,Bitwarden";
-          screenGapBottom = 5;
-          screenGapLeft = 5;
-          screenGapRight = 5;
-          screenGapTop = 5;
-          tileLayoutGap = 5;
-        };
+        #Script-khronkite = {
+        #  enableColumnsLayout = false;
+        #  enableMonocleLayout = false;
+        #  enableSpiralLayout = false;
+        #  enableSpreadLayout = false;
+        #  enableStairLayout = false;
+        #  enableThreeColumnLayout = false;
+        #  floatingClass = "mpv,org.kde.gwenview,re.sonny.Junction,Bitwarden";
+        #  screenGapBottom = 5;
+        #  screenGapLeft = 5;
+        #  screenGapRight = 5;
+        #  screenGapTop = 5;
+        #  tileLayoutGap = 5;
+        #};
       };
       plasma-localerc.Formats = with config.home.language; {
         LC_ALL = base;
@@ -342,5 +343,6 @@ in
 
   imports = [
     ./wezterm-titlebar
+    ./material-you
   ];
 }

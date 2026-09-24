@@ -2,7 +2,7 @@
 
 
   nix.buildMachines = [{
-    hostName = "192.168.1.238";
+    hostName = "100.64.0.1";
     system = "x86_64-linux";
     protocol = "ssh-ng";
     maxJobs = 16;

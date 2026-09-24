@@ -14,6 +14,8 @@ in {
       pipewire-pulse.wantedBy = [ "default.target" ];
     };
 
+    security.rtkit.enable = true;
+
     services.pipewire = {
       enable = true;
 
@@ -23,6 +25,16 @@ in {
         enable = true;
         support32Bit = true;
       };
+
+      # disable automatic BT headset mode switching
+      wireplumber.extraConfig."11-bluetooth-policy" = {
+        "wireplumber.settings" = {
+          "bluetooth.autoswitch-to-headset-profile" = false;
+        };
+      };
+
+      # opens UDP ports 6001-6002
+      raopOpenFirewall = true;
     };
   };
 }
