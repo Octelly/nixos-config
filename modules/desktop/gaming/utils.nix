@@ -62,7 +62,7 @@ in
       ++ optional cfg.overlays.mangohud mangohud
       ++ optional cfg.overlays.vkbasalt vkbasalt
       ++ optional cfg.protonup protonup-qt
-      ++ optional cfg.sgdboop nur.repos.bandithedoge.sgdboop-bin # https://github.com/NixOS/nixpkgs/pull/405710
+      ++ optional cfg.sgdboop sgdboop
       ++ optional cfg.rusty-psn rusty-psn-gui
       ++ optional cfg.amdgpu-top amdgpu_top
     ;

@@ -402,7 +402,7 @@ in
       # archive manager
       #mate.engrampa
 
-      gimp-with-plugins
+      stable.gimp-with-plugins
       inkscape-with-extensions
       #aseprite
 
@@ -530,8 +530,6 @@ in
       network = true;
     };
   };
-
-  programs.moonfin.enable = true;
 
   programs.zen-browser = {
     enable = true;

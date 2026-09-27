@@ -32,6 +32,7 @@
             psp = true;
           };
         };
+        ports.mario.kart.wii = true;
         fangames = {
           ringracers = true;
         };

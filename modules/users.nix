@@ -148,7 +148,6 @@ in
       #hyprland.homeManagerModules.default
       #kineticwe.homeModules.default
       ../home/squeezelite.nix
-      moonfin-flake.homeModules.latest
       niri.homeModules.niri
       nixvim.homeModules.nixvim
       plasma-manager.homeModules.plasma-manager

@@ -84,15 +84,6 @@
       inputs.home-manager.follows = "home";
     };
 
-    moonfin-flake = {
-      url = "github:siew24/moonfin-flake";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        home-manager.follows = "home";
-      };
-    };
-
-
     vicinae = {
       url = "github:vicinaehq/vicinae";
       inputs = {

@@ -35,6 +35,44 @@ in {
 
       # opens UDP ports 6001-6002
       raopOpenFirewall = true;
+
+      extraConfig.pipewire = {
+        # RAOP/AirPlay streaming to "smart speakers"
+        "10-airplay" = {
+          "context.modules" = [
+            {
+              name = "libpipewire-module-raop-discover";
+
+              # increase the buffer size if you get dropouts/glitches
+              # args = {
+              #   "raop.latency.ms" = 500;
+              # };
+            }
+          ];
+        };
+        "simple-protocol-stream" = {
+          "context.modules" = [
+            {
+              name = "libpipewire-module-protocol-simple";
+              args = {
+                capture = true;
+                playback = true;
+
+                #audio.rate = 48000;
+                #audio.channels = 2;
+
+                server.address = [
+                  "tcp:23456"
+                ];
+              };
+            }
+          ];
+        };
+      };
+
     };
+    networking.firewall.allowedTCPPorts = [
+      23456 # simple-protocol-stream
+    ];
   };
 }

@@ -1,4 +1,4 @@
-{ config, pkgs, lib, inputs, system, ... }:
+{ config, pkgs, lib, ... }:
 
 with builtins;
 with lib;
@@ -11,6 +11,9 @@ in {
     };
     mario = {
       sixtyfour = mkEnableOption "Super Mario 64";
+      kart = {
+        wii = mkEnableOption "Mario Kart Wii";
+      };
     };
   };
 
@@ -18,6 +21,7 @@ in {
     environment.systemPackages =
       optional cfg.zelda.majora pkgs._2ship2harkinian
       ++ optional cfg.zelda.ocarina pkgs.shipwright
-      ++ optional cfg.mario.sixtyfour pkgs.sm64ex-coop;
+      ++ optional cfg.mario.sixtyfour pkgs.sm64ex-coop
+      ++ optional cfg.mario.kart.wii pkgs.wheelwizard;
   };
 }
