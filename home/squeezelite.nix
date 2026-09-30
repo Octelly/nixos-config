@@ -118,7 +118,7 @@ in
         PrivateUsers = true;
         RestrictSUIDSGID = true;
         ProtectSystem = "full";
-        ProtectProc = true;
+        #ProtectProc = true; #FIXME: became unknown, check replacement
       };
     };
   };

@@ -141,7 +141,6 @@ in
     useUserPackages = true;
     extraSpecialArgs = {
       inherit inputs system;
-      nixConfig = config;
     };
     sharedModules = with inputs; [
       #anyrun.homeManagerModules.default

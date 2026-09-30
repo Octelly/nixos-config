@@ -1,5 +1,5 @@
 { config
-, nixConfig
+, osConfig
 , inputs
 , lib
 , pkgs
@@ -490,7 +490,7 @@ in
 
   services.squeezelite = {
     enable = true;
-    playerName = "octelly_at_${lib.replaceString "-" "_" nixConfig.networking.hostName}";
+    playerName = "octelly_at_${lib.replaceString "-" "_" osConfig.networking.hostName}";
 
     # FIXME: upstream issue https://github.com/jecaro/mprisqueeze/issues/2
     mprisqueeze.enable = false;
