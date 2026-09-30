@@ -153,6 +153,7 @@ in
       plasma-manager.homeModules.plasma-manager
       vicinae.homeManagerModules.default
       zen-browser.homeModules.beta
+      sonora.homeModules.default
     ];
     users = homeCfg;
   };

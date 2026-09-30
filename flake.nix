@@ -98,6 +98,11 @@
       };
     };
 
+    sonora = {
+      url = "github:sonorahq/sonora";
+      inputs.nixpkgs.follows = "unstable";
+    };
+
     eden-emu = {
       url = "github:grantimatter/eden-flake";
       inputs.nixpkgs.follows = "unstable";
