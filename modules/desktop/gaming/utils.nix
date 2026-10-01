@@ -58,7 +58,8 @@ in
     services.joycond.enable = mkDefault cfg.joycond;
 
     environment.systemPackages = with pkgs;
-      optional cfg.overlayConfigGUI goverlay
+      [ ]
+      #++ optional cfg.overlayConfigGUI goverlay #FIXME: doesn't build atm
       ++ optional cfg.overlays.mangohud mangohud
       ++ optional cfg.overlays.vkbasalt vkbasalt
       ++ optional cfg.protonup protonup-qt

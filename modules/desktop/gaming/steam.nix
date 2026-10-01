@@ -1,4 +1,4 @@
-{ config, pkgs, lib, inputs, system, ... }:
+{ config, lib, pkgs, ... }:
 
 with builtins;
 with lib;
@@ -11,6 +11,7 @@ in {
   config = mkIf cfg.enable {
     programs.steam = {
       enable = true;
+      package = pkgs.millennium-steam;
 
       remotePlay.openFirewall = mkDefault true;
       localNetworkGameTransfers.openFirewall = mkDefault true;
@@ -20,6 +21,11 @@ in {
 
       protontricks.enable = mkDefault true;
       gamescopeSession.enable = mkDefault true;
+    };
+
+    programs.gamescope = {
+      enable = mkDefault config.programs.steam.gamescopeSession.enable;
+      capSysNice = mkDefault true;
     };
 
     modules.desktop.gaming.utils = {
@@ -33,6 +39,8 @@ in {
       # SteamGridDB helper
       sgdboop = mkDefault true;
     };
+
+    hardware.graphics.enable32Bit = mkDefault true;
 
     environment
     .sessionVariables

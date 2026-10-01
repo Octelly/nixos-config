@@ -1,4 +1,4 @@
-{ pkgs, lib, config, inputs, ... }:
+{ pkgs, lib, config, osConfig, ... }:
 {
   xdg.configFile = {
     "kde-material-you-colors/config.conf".text =
@@ -97,6 +97,12 @@
           input_path = "${./vicinae-matugen-template.toml}";
           output_path = "~/.local/share/vicinae/themes/matugen.toml";
           post_hook = "${lib.getExe config.programs.vicinae.package} theme set matugen";
+        };
+      }
+        // lib.optionalAttrs osConfig.programs.steam.enable {
+        steam-millennium-material = {
+          input_path = "${./steam-millennium-material.template}";
+          output_path = "~/.steam/steam/millennium/themes/Material-Theme/css/main/colors/matugen.css";
         };
       }
         #  // lib.optionalAttrs config.programs.btop.enable {

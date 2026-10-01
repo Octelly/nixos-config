@@ -78,6 +78,8 @@
     #  inputs.hyprland.follows = "hyprland";
     #};
 
+    millennium.url = "github:SteamClientHomebrew/Millennium?dir=packages/nix";
+
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake";
       inputs.nixpkgs.follows = "unstable";
@@ -86,14 +88,14 @@
 
     vicinae = {
       url = "github:vicinaehq/vicinae";
-      inputs = {
-        nixpkgs.follows = "unstable";
-      };
+      #inputs = {
+      #  nixpkgs.follows = "unstable";
+      #};
     };
     vicinae-extensions = {
       url = "github:vicinaehq/extensions";
       inputs = {
-        nixpkgs.follows = "unstable";
+        #nixpkgs.follows = "unstable";
         vicinae.follows = "vicinae";
       };
     };
@@ -170,7 +172,8 @@
     , niri
     , emacs-overlay
     , nix-cachyos-kernel
-      #, kineticwe
+    , millennium
+    , vicinae
     , ...
     }@inputs:
     let
@@ -194,13 +197,14 @@
         };
 
         overlays = importNixFiles ./overlays ++ [
-          emacs-overlay.overlay
+          #emacs-overlay.overlay
           f2k.overlays.default
           #kineticwe.overlays.default
-          niri.overlays.niri
+          #niri.overlays.niri
           nix-cachyos-kernel.overlays.pinned
           nur.overlays.default
           vscode-ext.overlays.default
+          millennium.overlays.default
         ];
       };
 

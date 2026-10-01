@@ -159,10 +159,11 @@
       fd
       gcc
       git
-      mesa-demos # Required for "OpenGL (GLX)" page of KDE's Info Center
+      kdePackages.krfb # screenshare, virtual displays on Wayland
       libnotify
       lm_sensors
       man-pages
+      mesa-demos # Required for "OpenGL (GLX)" page of KDE's Info Center
       pciutils
       ripgrep
       unrar
@@ -388,7 +389,7 @@
   system.tools.nixos-generate-config.enable = lib.mkDefault false;
 
   imports = with inputs; [
-    #kineticwe.nixosModules.default
+    vicinae.nixosModules.default
   ];
 }
 

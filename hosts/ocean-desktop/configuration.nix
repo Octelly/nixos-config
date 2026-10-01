@@ -61,6 +61,9 @@
 
   hardware.graphics = {
     enable = true;
+    enable32Bit = true;
+    package = pkgs.stable.mesa;
+    package32 = pkgs.stable.pkgsi686Linux.mesa;
   };
 
   programs.corectrl.enable = true;
