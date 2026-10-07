@@ -967,6 +967,22 @@
     },
     "nixpkgs_10": {
       "locked": {
+        "lastModified": 1790578696,
+        "narHash": "sha256-ZoxIApko70jCdbH3l20HWXOBaT2HZd87orzd2yJ9dVE=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "7a0f122f5090cf4c2ade2a13a0e229d4e19ba71f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_11": {
+      "locked": {
         "lastModified": 1779560665,
         "narHash": "sha256-tpyBcxPpcQb8ukyNF7DoCwfSY3VPsxHoYwj00Cayv5o=",
         "owner": "nixos",
@@ -981,7 +997,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_11": {
+    "nixpkgs_12": {
       "locked": {
         "lastModified": 1784564315,
         "narHash": "sha256-7OpsHHIZFUBLbeHNQ0oC40DZRQjsmGWodXge+OqgPgk=",
@@ -1106,11 +1122,11 @@
     },
     "nixpkgs_9": {
       "locked": {
-        "lastModified": 1790578696,
-        "narHash": "sha256-ZoxIApko70jCdbH3l20HWXOBaT2HZd87orzd2yJ9dVE=",
+        "lastModified": 1787736819,
+        "narHash": "sha256-cV5xEJJK3BvhU8rEd4mC9UsmDi5qscv/kzGPhBRC5WA=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "7a0f122f5090cf4c2ade2a13a0e229d4e19ba71f",
+        "rev": "9fbb54b33e91ee4ca368e35a78e0613c720600b3",
         "type": "github"
       },
       "original": {
@@ -1280,6 +1296,7 @@
         "nixvim": "nixvim",
         "nur": "nur",
         "plasma-manager": "plasma-manager",
+        "skwd-wall": "skwd-wall",
         "sonora": "sonora",
         "stable": "stable",
         "unstable": "unstable",
@@ -1363,6 +1380,25 @@
       "original": {
         "owner": "oxalica",
         "repo": "rust-overlay",
+        "type": "github"
+      }
+    },
+    "skwd-wall": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_9"
+      },
+      "locked": {
+        "lastModified": 1790891305,
+        "narHash": "sha256-VFhWFUmADuG55w5XPRikv0NOzRdid6ECmlEEAxnu50U=",
+        "owner": "liixini",
+        "repo": "skwd-wall",
+        "rev": "2b85cb2b45a1efb1140280571d522f53a58169d9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "liixini",
+        "ref": "nix",
+        "repo": "skwd-wall",
         "type": "github"
       }
     },
@@ -1590,7 +1626,7 @@
     },
     "vicinae": {
       "inputs": {
-        "nixpkgs": "nixpkgs_9",
+        "nixpkgs": "nixpkgs_10",
         "numen": "numen",
         "soulver-cpp": "soulver-cpp",
         "systems": "systems_5"
@@ -1612,7 +1648,7 @@
     "vicinae-extensions": {
       "inputs": {
         "flake-compat": "flake-compat_5",
-        "nixpkgs": "nixpkgs_10",
+        "nixpkgs": "nixpkgs_11",
         "systems": "systems_6",
         "vicinae": [
           "vicinae"
@@ -1634,7 +1670,7 @@
     },
     "vscode-ext": {
       "inputs": {
-        "nixpkgs": "nixpkgs_11"
+        "nixpkgs": "nixpkgs_12"
       },
       "locked": {
         "lastModified": 1790831594,

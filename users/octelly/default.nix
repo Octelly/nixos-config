@@ -319,7 +319,7 @@ in
       #  ];
       #})
 
-      stable.jellyfin-media-player
+      jellyfin-media-player
       grayjay
       feishin
 
@@ -367,6 +367,12 @@ in
 
       # GTK theme
       adw-gtk3
+
+      #FIXME: make into a proper module
+      inputs.skwd-wall.packages."${system}".default
+      inputs.skwd-wall.packages."${system}".skwd-paper-plasma
+      kdePackages.qttools # skwd-wall needs on path
+      matugen # skwd-wall needs on path
 
       kdePackages.filelight
       kdePackages.isoimagewriter

@@ -91,15 +91,24 @@
         caching = true;
         prefer = "closest-to-fallback";
       };
-      templates = { }
-        // lib.optionalAttrs config.programs.vicinae.enable {
+      templates = {
+        kcolorscheme = {
+          input_path = "${./kcolorscheme.colors}";
+          output_path = "~/.local/share/color-schemes/matugen.colors";
+          post_hook = "
+            kwriteconfig6 --file kdeglobals --group General --key ColorScheme \"\"
+            plasma-apply-colorscheme matugen
+          ";
+        };
+      }
+      // lib.optionalAttrs config.programs.vicinae.enable {
         vicinae = {
           input_path = "${./vicinae-matugen-template.toml}";
           output_path = "~/.local/share/vicinae/themes/matugen.toml";
           post_hook = "${lib.getExe config.programs.vicinae.package} theme set matugen";
         };
       }
-        // lib.optionalAttrs osConfig.programs.steam.enable {
+      // lib.optionalAttrs osConfig.programs.steam.enable {
         steam-millennium-material = {
           input_path = "${./steam-millennium-material.template}";
           output_path = "~/.steam/steam/millennium/themes/Material-Theme/css/main/colors/matugen.css";
