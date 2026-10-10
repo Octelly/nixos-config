@@ -221,6 +221,7 @@
     25565 # minecra
     42420 # vintage story
     6500 # MK Retro Rewind
+    8001 # cutentr 3DS streaming
 
     # NOTE: stale, not used in a long while, to be tested and re-enabled if needed
     #3216 # EA App
@@ -229,6 +230,7 @@
     25565 # minecra
     42420 # vintage story
     6500 # MK Retro Rewind
+    8001 # cutentr 3DS streaming
 
     # NOTE: stale, not used in a long while, to be tested and re-enabled if needed
     #3216 # EA App

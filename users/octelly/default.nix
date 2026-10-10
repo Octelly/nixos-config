@@ -373,6 +373,8 @@ in
       inputs.skwd-wall.packages."${system}".skwd-paper-plasma
       kdePackages.qttools # skwd-wall needs on path
       matugen # skwd-wall needs on path
+      steamcmd # skwd-wall needs on path
+      zenity # skwd-wall needs on path
 
       kdePackages.filelight
       kdePackages.isoimagewriter
