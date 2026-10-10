@@ -25,6 +25,7 @@
           nintendo.wii = true;
         };
         fangames.ringracers = true;
+        ports.mario.kart.wii = true;
       };
     };
     hardware = {
@@ -41,6 +42,9 @@
 
   hardware.graphics = {
     enable = true;
+    enable32Bit = true;
+    package = pkgs.stable.mesa; # FIXME: upstream Mesa is currently broken
+    package32 = pkgs.stable.pkgsi686Linux.mesa;
   };
 
   services.tailscale.enable = true;
@@ -51,6 +55,7 @@
   };
 
   networking.firewall.allowedTCPPorts = [ 25565 ];
+  networking.firewall.allowedUDPPorts = [ 25565 ];
 
   networking.firewall.allowedTCPPortRanges = [
     # FTP active mode (KIO + 3DS ftpd)
@@ -69,6 +74,11 @@
   };
   # NOTE: should not be mixed with ananicy
   modules.desktop.gaming.utils.gamemode = lib.mkForce false;
+
+  virtualisation.docker = {
+    enable = true;
+    enableOnBoot = false;
+  };
 
   #nix.buildMachines = [{
   #  hostName = "192.168.1.137";

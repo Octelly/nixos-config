@@ -62,7 +62,7 @@
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
-    package = pkgs.stable.mesa;
+    package = pkgs.stable.mesa; # FIXME: upstream Mesa is currently broken
     package32 = pkgs.stable.pkgsi686Linux.mesa;
   };
 
