@@ -33,6 +33,14 @@ let
       # [9p->virtiofs]
       # this option uses 9p to mount the host's nix store —
       # replaced with our implementation
+      #
+      # NOTE: setting this to false also suppresses upstream's regInfo
+      # kernel parameter (used by register-nix-paths.service to populate
+      # the guest Nix DB). The wrapper re-injects regInfo via
+      # QEMU_KERNEL_PARAMS (see mkRunner) — without it, anything asking
+      # the guest daemon to realise a host-built path (e.g. home-manager
+      # activation's `nix-store --realise --add-root`) fails with
+      # "path is not valid".
       mountHostNixStore = false;
 
       # /nix/store needs to be writable so the VM can install packages
@@ -88,9 +96,12 @@ let
       ];
     };
 
-  mkRunner = name: vmScript: pkgs.writers.writePython3 "${name}-vm"
+  mkRunner = name: vmScript: regInfo: pkgs.writers.writePython3 "${name}"
     {
-      libraries = [ pkgs.python3Packages.click pkgs.python3Packages.systemd-python ];
+      libraries = with pkgs.python3Packages;[
+        click
+        systemd-python
+      ];
       flakeIgnore = [ "E501" ];
     } ''
     import os
@@ -110,6 +121,12 @@ let
 
     VIRTIOFSD = "${virtiofsdBin}"
     VM_SCRIPT = "${vmScript}"
+    # Guest Nix DB registration data (see QEMU_KERNEL_PARAMS below).
+    # REG_INFO is the in-guest path (shared store); REG_INFO_DERIVATION is
+    # only interpolated so the closure-info derivation gets built with the
+    # wrapper and is present in the shared store at boot.
+    REG_INFO = "${regInfo.regInfoPath}"
+    REG_INFO_DERIVATION = "${regInfo.regInfo}"  # noqa: F841 - build-time dependency only
 
 
     def log(msg):
@@ -147,9 +164,13 @@ let
     @click.option("--display", type=click.Choice(["gtk", "gtk-gl", "sdl", "none"]), default="gtk-gl", help="Display backend (default: gtk-gl)")
     @click.option("--no-virgl", is_flag=True, help="Disable VirGL (use plain virtio VGA instead)")
     @click.option("--serial", default="mon:stdio", help="QEMU serial device (default: mon:stdio)")
-    def cli(ram, cpus, no_kvm, display, no_virgl, serial):
+    @click.option("--no-cleanup", is_flag=True, help="Do not clean up temporary files on exit")
+    def cli(ram, cpus, no_kvm, display, no_virgl, serial, no_cleanup):
         total_ram = detect_ram_mb()
         total_cpus = os.cpu_count() or 4
+
+        global _cleaned_up
+        _cleaned_up = no_cleanup
 
         if not ram:
             ram = min(total_ram // 2, 8192)
@@ -174,7 +195,7 @@ let
         unit_name = f"virtiofsd-{os.path.basename(tmpdir)}"
 
         log(f"Starting virtiofsd (socket at {virtiofs_sock})...")
-        with open(virtiofsd_log, "w") as errlog:
+        with open(virtiofsd_log, "w") as logfile:
             run_props = [
                 "--unit", unit_name,
                 "-p", "NoNewPrivileges=yes",
@@ -196,7 +217,7 @@ let
             ]
             systemd = True
             try:
-                virtiofsd = systemd_run(run_props, stdout=subprocess.DEVNULL, stderr=errlog)
+                virtiofsd = systemd_run(run_props, stdout=logfile, stderr=logfile)
             except FileNotFoundError:
                 log("systemd-run not found, spawning directly (traceback follows)")
                 for line in traceback.format_exc().splitlines():
@@ -229,8 +250,8 @@ let
                 log_cmd(virtiofsd_args)
                 virtiofsd = subprocess.Popen(
                     virtiofsd_args,
-                    stdout=subprocess.DEVNULL,
-                    stderr=errlog,
+                    stdout=logfile,
+                    stderr=logfile,
                 )
 
         def stop_virtiofsd():
@@ -253,6 +274,7 @@ let
                     log("stopping virtiofsd")
                     virtiofsd.terminate()
                     virtiofsd.wait()
+                # FIXME: do we not stop it otherwise?
 
         def cleanup_tmpdir():
             log(f"removing {tmpdir}")
@@ -360,10 +382,12 @@ let
         else:
             log(f"virtiofsd ready (PID {virtiofsd.pid})")
 
+        # NOTE: mem0 changed to mem1 as upstream now defines its own mem0
+        #       we degine mem1 to avoid conflicts and preserve runtime adaptability
         qemu_opts = (
             f"-m {ram}"
-            f" -object memory-backend-memfd,id=mem0,size={ram}M,share=on"
-            f" -machine type=q35,accel=kvm:tcg,memory-backend=mem0"
+            f" -object memory-backend-memfd,id=mem1,size={ram}M,share=on"
+            f" -machine type=q35,accel=kvm:tcg,memory-backend=mem1"
             f" -cpu max"
             f" -smp {cpus}"
             f" -serial {serial}"
@@ -400,6 +424,15 @@ let
 
         os.environ["QEMU_OPTS"] = qemu_opts
 
+        # The guest Nix DB starts empty (fresh disk), so the daemon
+        # considers every host-built path invalid. Upstream qemu-vm.nix
+        # populates it via register-nix-paths.service, fed by regInfo= on
+        # the kernel cmdline — but that parameter is suppressed by
+        # mountHostNixStore=false above. Upstream's -append ends with
+        # $QEMU_KERNEL_PARAMS, so inject regInfo through it instead.
+        extra_kernel_params = os.environ.get("QEMU_KERNEL_PARAMS", "")
+        os.environ["QEMU_KERNEL_PARAMS"] = f"{extra_kernel_params} regInfo={REG_INFO}".strip()
+
         script = os.environ.get("NIXOS_VM_SCRIPT", VM_SCRIPT)
 
         vm_name = os.path.basename(script).removeprefix("run-").removesuffix("-vm")
@@ -419,7 +452,7 @@ let
 
   packages = builtins.listToAttrs (map
     (name: {
-      name = "${name}-vm";
+      inherit name;
       value = (buildVm name).config.system.build.vm;
     })
     hostNames);
@@ -427,15 +460,24 @@ let
   apps = builtins.listToAttrs (map
     (name:
       let
-        vmPkg = packages."${name}-vm";
+        vmExtended = buildVm name;
+        vmPkg = vmExtended.config.system.build.vm;
         vmHostName = "${name}-vm";
         vmScript = "${vmPkg}/bin/run-${vmHostName}-vm";
+        # Closure registration for the guest Nix DB, evaluated outside
+        # the system closure (referencing it from a guest module would
+        # be a dependency cycle). Covers virtualisation.additionalPaths
+        # (toplevel by default, hence the home-manager generation).
+        regInfo = import (modulesPath + "/../lib/store-registration-info.nix") {
+          hostPkgs = pkgs;
+          rootPaths = vmExtended.config.virtualisation.additionalPaths;
+        };
       in
       {
-        name = "${name}-vm";
+        inherit name;
         value = {
           type = "app";
-          program = toString (mkRunner name vmScript);
+          program = toString (mkRunner name vmScript regInfo);
         };
       }
     )

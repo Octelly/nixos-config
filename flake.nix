@@ -241,7 +241,7 @@
     in
     {
       inherit nixosConfigurations;
-      packages.${system} = vm.packages;
-      apps.${system} = vm.apps;
+      packages.${system}.vm = vm.packages;
+      apps.${system}.vm = vm.apps;
     };
 }
