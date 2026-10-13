@@ -319,9 +319,9 @@ in
       #  ];
       #})
 
-      jellyfin-media-player
-      grayjay
-      feishin
+      #jellyfin-media-player
+      #grayjay
+      #feishin
 
       moonlight-qt
 
@@ -384,8 +384,8 @@ in
       kdePackages.partitionmanager
       qdiskinfo
 
-      engrampa
-      p7zip
+      #engrampa
+      #p7zip
 
       # spelling stuff
       # is also used by Plasma
