@@ -232,6 +232,9 @@
     #  enable = true;
     #  package = pkgs.niri-unstable;
     #};
+
+    # default true with plasma6
+    kde-pim.enable = false;
   };
 
   # gtklock access to password verification (PAM)
