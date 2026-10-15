@@ -1,4 +1,4 @@
-{ inputs, lib, repoConf, ... }:
+{ inputs, lib, repoConf, self, ... }:
 
 let system = "x86_64-linux"; in
 lib.nixosSystem {
@@ -22,5 +22,5 @@ lib.nixosSystem {
   ] ++
   (lib.mapModulesRec' ../../modules import);
 
-  specialArgs = { inherit inputs system; };
+  specialArgs = { inherit inputs system self; };
 }

@@ -1,4 +1,5 @@
-{ config
+{ self
+, config
 , osConfig
 , inputs
 , lib
@@ -318,6 +319,8 @@ in
       #    thunar-archive-plugin
       #  ];
       #})
+
+      self.packages."${system}".ffmpeg-two-pass
 
       #jellyfin-media-player
       #grayjay

@@ -213,7 +213,7 @@
       lib = nixpkgs.lib.extend (
         final: prev: {
           ext = import ./lib {
-            inherit inputs repoConf;
+            inherit inputs repoConf self;
             lib = prev;
           };
         }
@@ -221,13 +221,7 @@
 
       nixosConfigurations = mapHosts ./hosts;
 
-      system = "x86_64-linux";
-
-      # NOTE: bare pkgs — no overlays (repoConf.overlays not imported here).
-      # None of repoConf's overlays touch python3Packages or virtiofsd,
-      # so the VM builder is unaffected. If that ever changes, import
-      # `nixpkgs { inherit system; overlays = repoConf.overlays; }` instead.
-      pkgs = import nixpkgs { inherit system; };
+      forAllSystems = lib.genAttrs lib.systems.flakeExposed;
 
       hostNames = builtins.attrNames (
         builtins.removeAttrs (builtins.readDir ./hosts) [ "shared" ]
@@ -235,13 +229,42 @@
 
       modulesPath = "${nixpkgs}/nixos/modules";
 
-      vm = import ./lib/vm.nix {
-        inherit pkgs lib nixosConfigurations hostNames modulesPath;
-      };
     in
     {
       inherit nixosConfigurations;
-      packages.${system}.vm = vm.packages;
-      apps.${system}.vm = vm.apps;
+
+      packages = forAllSystems (system:
+        let
+          # NOTE: bare pkgs — no overlays (repoConf.overlays not imported here).
+          # None of repoConf's overlays touch python3Packages or virtiofsd,
+          # so the VM builder is unaffected. If that ever changes, import
+          # `nixpkgs { inherit system; overlays = repoConf.overlays; }` instead.
+          pkgs = import nixpkgs { inherit system; };
+          vm = import ./lib/vm.nix {
+            inherit pkgs lib nixosConfigurations hostNames modulesPath;
+          };
+        in
+        {
+          vm = vm.packages;
+        }
+        // (lib.filesystem.packagesFromDirectoryRecursive {
+          callPackage = pkgs.callPackage;
+          directory = ./packages;
+        }));
+
+      apps = forAllSystems (system:
+        let
+          # NOTE: bare pkgs — no overlays (repoConf.overlays not imported here).
+          # None of repoConf's overlays touch python3Packages or virtiofsd,
+          # so the VM builder is unaffected. If that ever changes, import
+          # `nixpkgs { inherit system; overlays = repoConf.overlays; }` instead.
+          pkgs = import nixpkgs { inherit system; };
+          vm = import ./lib/vm.nix {
+            inherit pkgs lib nixosConfigurations hostNames modulesPath;
+          };
+        in
+        {
+          vm = vm.apps;
+        });
     };
 }
