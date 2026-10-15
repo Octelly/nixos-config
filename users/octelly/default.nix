@@ -30,7 +30,6 @@ let
 
     "--ozone-platform-hint=auto" # automatic wayland
   ];
-  darkMode = true;
   posysCursors = pkgs.stdenv.mkDerivation rec {
     pname = "posy-improved-cursor-linux";
     version = "1.6";
@@ -1000,43 +999,6 @@ in
   #  enableZshIntegration = true;
   #};
 
-  dconf.settings =
-    let
-      color-scheme = if darkMode then "prefer-dark" else "prefer-light";
-    in
-    {
-      "org/gnome/desktop/interface" = {
-        "color-scheme" = color-scheme;
-      };
-      "org/freedesktop/interface" = {
-        "color-scheme" = color-scheme;
-      };
-    };
-
-  #programs.anyrun = {
-  #  enable = false;
-  #  config =
-  #    let
-  #      fraction = x: { fraction = x; };
-  #    in
-  #    {
-  #      x = fraction 0.5;
-  #      y = fraction 0.4;
-  #      width = fraction 0.35;
-  #      ignoreExclusiveZones = true;
-  #      plugins = with inputs.anyrun.packages.${system}; [
-  #        # desktop entries
-  #        applications
-  #        # unicode symbols
-  #        symbols
-  #        # shell commands
-  #        shell
-  #        # calculator
-  #        rink
-  #      ];
-  #    };
-  #};
-
   home.sessionVariables = {
     EDITOR = "nvim";
     _JAVA_AWT_WM_NONREPARENTING = 1;
@@ -1204,6 +1166,11 @@ in
   #qt.style.name = "kvantum";
   #qt.style.package = pkgs.adwaita-qt;
   #qt.style.name = if darkMode then "adwaita-dark" else "adwaita";
+
+  lightdark = {
+    enable = true;
+    mode = "dark";
+  };
 
   xresources.properties = {
     # 96 is 1x
