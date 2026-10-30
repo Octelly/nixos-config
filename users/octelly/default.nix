@@ -798,7 +798,7 @@ in
   programs.vscode = {
     enable = true;
 
-    extensions =
+    profiles.default.extensions =
       (with pkgs.open-vsx; [
         # make thing usable
         vscodevim.vim
@@ -819,6 +819,8 @@ in
         svelte.svelte-vscode
         tamasfe.even-better-toml
         wayou.vscode-todo-highlight
+        theqtcompany.qt-qml
+        theqtcompany.qt-core
 
         # java
         redhat.java
@@ -858,7 +860,7 @@ in
         ms-vscode-remote.remote-ssh
         ms-vscode-remote.remote-ssh-edit
       ]);
-    userSettings = rec {
+    profiles.default.userSettings = rec {
       # Vim controls
       #"extensions.experimental.affinity" = {
       #  "asvetliakov.vscode-neovim" = 1;
@@ -944,6 +946,10 @@ in
 
       # Svelte
       "svelte.enable-ts-plugin" = true;
+
+      # QT
+      "qt-qml.qmlls.useQmlImportPathEnvVar" = true;
+      "qt-qml.qmlls.customExePath" = "${pkgs.kdePackages.qtdeclarative}/bin/qmlls";
 
       # Java
       "java.jdt.ls.java.home" = "${pkgs.openjdk25}/lib/openjdk";

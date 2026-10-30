@@ -6,9 +6,9 @@ in
   programs.git = {
     enable = true;
 
-    userName = "Octelly";
-    userEmail = "octelly@owo.digital";
-    extraConfig.credential = {
+    settings.user.name = "Octelly";
+    settings.user.email = "octelly@owo.digital";
+    settings.credential = {
       "https://github.com" = lib.mkIf use_gh {
         helper = "${pkgs.gh}/bin/gh auth git-credential";
       };

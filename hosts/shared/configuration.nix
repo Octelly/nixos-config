@@ -3,7 +3,6 @@
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" ];
     substituters = [
-      "https://attic.xuyh0120.win/lantian"
       "https://cache.nixos.org?priority=10"
       "https://cosmic.cachix.org/" # Cosmic DE
       "https://ezkea.cachix.org" # Hoyoverse
@@ -16,7 +15,6 @@
       "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
       "ezkea.cachix.org-1:ioBmUbJTZIKsHmWWXPe1FSFbeVe+afhfgqgTSNd34eI="
       "fortuneteller2k.cachix.org-1:kXXNkMV5yheEQwT0I4XYh1MaCSz+qg72k8XAi2PthJI="
-      "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
       "vicinae.cachix.org-1:1kDrfienkGHPYbkpNj1mWTr7Fm1+zcenzgTizIcI3oc="
       "wezterm.cachix.org-1:kAbhjYUC9qvblTE+s7S+kl5XM1zVa4skO+E/1IDWdH0="
     ];
@@ -375,7 +373,7 @@
   # inspired by perlless profile
   # https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/profiles/perlless.nix
   boot.initrd.services.resolved.enable = true;
-  boot.initrd.systemd.enable = lib.mkDefault true;
+  #boot.initrd.systemd.enable = lib.mkDefault true;
   boot.initrd.systemd.fido2.enable = lib.mkDefault false;
   # libvirt 12.1.0+ encrypts secrets via systemd-creds (TPM-bound).
   # This is fragile across TPM state changes and unnecessary for basic VM use.
